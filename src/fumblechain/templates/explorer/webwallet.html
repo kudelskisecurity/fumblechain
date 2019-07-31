@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="product margin-bottom">
+    <h2>Generate new wallet</h2>
+
+
+    <form action="/webwallet/generate" method="POST">
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Generate</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="product margin-bottom">
+    <h2>Active wallet <span class="badge badge-dark">{{ webwallet.active_wallet() }}</span>{% if address %} <a
+            href="/wallet/{{ address }}" class="badge badge-primary">Balance: {{ balance }}</a>{% endif %}</h2>
+
+
+    <form action="/webwallet/select" method="POST">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="wallet">Wallet</label>
+            <div class="col-sm-10">
+                <select class="form-control" id="wallet" name="wallet">
+                    <option>Please select a wallet</option>
+                    {% for w in webwallet.wallet_names() %}
+                    <option value="{{ w }}" {% if w== webwallet.active_wallet() %} selected{% endif %}>{{ w }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Change</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+<div class="product margin-bottom">
+    <h2>Create transaction</h2>
+
+    <form action="/webwallet/tx" method="POST">
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="destination">Destination</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" id="destination" name="destination"/>
+                <small class="form-text text-muted">Please insert the destination wallet address.</small>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="quantity">Quantity</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" id="quantity" name="quantity"/>
+                <small class="form-text text-muted">Please insert how many FumbleCoins to send.</small>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button {% if not webwallet.active_wallet() %}disabled{% endif %} type="submit" class="btn btn-primary">
+                    Send
+                </button>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+<div class="product">
+    <h2>Miner <span class="badge {% if webwallet.is_mining() %}badge-success{% else %}badge-dark{% endif %}">{% if webwallet.is_mining() %}Running{% else %}Shutdown{% endif %}</span>
+    </h2>
+
+    {% if not webwallet.is_mining() %}
+    <form action="/webwallet/mine/toggle" method="POST">
+        <div class="form-group row">
+            <div class="col-sm-5">
+                <button {% if not webwallet.active_wallet() %}disabled{% endif %} type="submit" class="btn btn-success">
+                    Start mining
+                </button>
+            </div>
+        </div>
+    </form>
+    {% else %}
+    <strong>Mining has started. Please <a href="/webwallet">refresh</a> the page to update status.</strong>
+    {% endif %}
+
+</div>
+
+{% endblock %}
