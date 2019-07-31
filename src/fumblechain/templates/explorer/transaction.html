@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="product margin-bottom">
+    <h2>Transaction {{ tx.index }}</h2>
+
+    <ul>
+        <li>Source: <a href="/wallet/{{tx.src}}">{{ tx.src | address }}</a></li>
+        <li>Destination: <a href="/wallet/{{tx.dst}}">{{ tx.dst | address }}</a></li>
+        <li>Quantity: {{ tx.qty }} FumbleCoins</li>
+        <li>Magic: {{ tx.magic }}</li>
+    </ul>
+
+</div>
+
+<div class="product margin-bottom">
+    <h4>Signature</h4>
+    <textarea disabled class="form-control" rows="4">{{ tx.signature }}</textarea>
+
+</div>
+
+
+<div class="product margin-bottom">
+    <h4>JSON</h4>
+
+    <textarea disabled class="form-control form-control-sm" rows="7">{{ tx.to_json() }}</textarea>
+
+    <small class="form-text text-muted">
+        This is the transaction serialized in JSON format, as sent over the network.
+    </small>
+</div>
+
+<div class="product">
+    <h4>JSON (pretty printed)</h4>
+
+    <textarea disabled class="form-control form-control-sm" rows="13">{{ pretty_json }}</textarea>
+
+    <small class="form-text text-muted">
+        Same as above, but pretty printed.
+    </small>
+</div>
+
+{% endblock %}

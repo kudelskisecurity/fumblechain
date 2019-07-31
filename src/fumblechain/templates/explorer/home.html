@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block center %}
+
+
+<div class="explorer-home">
+
+    <div class="product latest-transactions table-sm">
+        <h4>Latest transactions</h4>
+
+        <table class="table table-striped table-sm">
+
+            <thead class="thead-dark">
+            <tr>
+                <th>Index</th>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Quantity</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for tx in txs %}
+            <tr>
+                <td><a href="/tx/{{ tx.index }}">{{ tx.index }}</a></td>
+                <td><a href="/wallet/{{ tx.src }}">{{ tx.src | address }}</a></td>
+                <td><a href="/wallet/{{ tx.dst }}">{{ tx.dst | address }}</a></td>
+                <td>{{ tx.qty }}</td>
+            </tr>
+
+            {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="product latest-blocks">
+        <h4>Latest blocks</h4>
+
+        <table class="table table-striped table-sm">
+
+            <thead class="thead-dark">
+            <tr>
+                <th>Index</th>
+                <th>Timestamp</th>
+                <th>Transactions</th>
+                <th>Miner</th>
+                <th>Target</th>
+                <th>Block size (bytes)</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for b in blocks %}
+            <tr>
+                <td><a href="/block/{{ b.index }}">Block {{ b.index }}</a></td>
+                <td>{{ b.timestamp | datetime }}</td>
+                <td>{{ b.tx_count }}</td>
+                <td>{% if b.miner %}<a href="/wallet/{{ b.miner }}">{{ b.miner | address}}{% else %}None{% endif
+                    %}</a>
+                </td>
+                <td>{{ b.target }}</td>
+                <td>{{ b.size_bytes }}</td>
+            </tr>
+
+            {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="product chain-details">
+        <h4>Chain details</h4>
+        <ul>
+            <li>Chain magic: {{ bc.magic }}</li>
+            <li>Total block count: {{ blocks_count }} [<a href="/block/{{blocks_count - 1}}">Show latest block</a>]</li>
+            <li>Total transaction count: {{ tx_count }}</li>
+            <li>Target: {{ target }}</li>
+        </ul>
+    </div>
+
+    <div class="product daemon-details">
+        <h4>Daemon details</h4>
+        <ul>
+            <li>Port: {{ p2p.port }}</li>
+            <li>API port: {{ p2p.api_port }}</li>
+            <li>Explorer port: {{ p2p.explorer_port }}</li>
+            <li>Connected peers: {{ peers_count }} [<a href="/peers">Show peers</a>]</li>
+        </ul>
+    </div>
+
+</div>
+{% endblock %}
