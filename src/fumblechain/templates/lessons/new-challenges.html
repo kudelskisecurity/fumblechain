@@ -1,0 +1,166 @@
+<p>
+    In this lesson we will explain how to add a new challenge to the FumbleStore. You are expected to be able to work
+    with Docker and docker-compose for this lesson.
+</p>
+
+<p>
+    First, make sure that all work is being performed on the <code>fumblestore</code> git branch of the repository.
+
+    <code>
+<pre>$ cd fumblechain
+$ git checkout fumblestore
+$ cd src/fumblechain</pre>
+    </code>
+</p>
+
+<h5>Registering a new challenge</h5>
+
+<p>
+    New challenges should be added in <code>fumblestore.py</code> in the <code>insert_products()</code> function. Adding
+    a new challenge may require re-building the SQLite database for the FumbleStore for changes to take effect.
+
+    Let's add a new challenge:
+
+    <code>
+<pre>def insert_products():
+    ch1_product_node_api_url = os.environ["CHALLENGE1_PRODUCT_NODE_API_URL"]
+    new_challenge_node_api_url = os.environ["NEW_CHALLENGE_PRODUCT_NODE_API_URL"]
+    products = [
+        Product(short="flag1", title="Challenge 1", price=1000,
+                description="An existing challenge.",
+                description_file="challenges/challenge1.html",
+                secret_flag="FCKS{FLag_wAs_sEcrET}", node_api_url=ch1_product_node_api_url,
+                hint="Some hint."),
+        Product(short="new_challenge", title="My new challenge", price=1337,
+                description="Super cool challenge I want to add",
+                description_file="challenges/my_new_challenge.html",
+                secret_flag="FCKS{NEW_CHALLENGE_IS_SOOOOO_NICE}",
+                node_api_url=new_challenge_node_api_url,
+                hint="""Need a hint? Better use that &lt;a target="_blank" href="https://google.com"&gt;Google-fu&lt;/a&gt; of yours."""),
+    ]
+        </pre>
+    </code>
+</p>
+
+<p>
+    Each challenge is an instance of the <code>Product</code> class. They are called products because that's actually
+    products that people buy from online stores. Remember that the FumbleStore is a fictional E-Commerce website.
+
+    The Product class takes 8 arguments:
+
+<ul>
+    <li><code>short</code>, a short name which will appear in the URL. This name must be unique for all challenges.</li>
+    <li><code>title</code>, the name of the challenge.</li>
+    <li><code>price</code>, the amount of FumbleCoins players must pay to solve the challenge.</li>
+    <li><code>description</code>, a short description of the challenge. This description will appear on the <a
+            href="/challenges">Challenges</a> page.
+    </li>
+    <li><code>description_file</code>, the path to the HTML file which contains the challenge instructions, relative to
+        the <code>templates</code> directory.
+    </li>
+    <li><code>secret_flag</code>, the challenge CTF secret flag which is displayed once the challenge has been solved.
+    </li>
+    <li><code>node_api_url</code>, the URL of the FumbleChain node on which to check whether the payment has been
+        executed. This is used to validate whether the challenge has been solved. We assume that all challenges need to
+        be solved by sending FumbleCoins to a specific address at the moment.
+    </li>
+    <li><code>hint</code>, a string containing a hint for players who may be stuck trying to solve the challenge.</li>
+</ul>
+</p>
+
+<h5>Building the challenge infrastructure</h5>
+
+<p>
+    Now that we have registered our new challenge in the FumbleStore we need to setup the infrastructure of the
+    challenge itself.
+    This is usually achieved by running an instance of the FumbleChain that is vulnerable to some flaw only which
+    players are supposed to exploit to steal coins. Finally, players send the stolen coins to the challenge address to
+    complete the challenge.
+</p>
+
+<p>
+    Let's assume we have a new idea for a challenge that can be implemented as a flaw in FumbleChain. One example would
+    be to add a flaw such that FumbleChain incorrectly computes the wallet balance and considers wallets to have a
+    balance of 100000000 if the wallet balance is a multiple of 23 (this is just an example!).
+</p>
+
+<p>
+    We will first create a new branch called <code>challenge1337</code> from the
+    <code>master</code> branch. Then write the changes in the code, commit and push those changes.
+</p>
+
+<p>
+    Now that we have built a version of FumbleChain on the branch <code>challenge1337</code> which his vulnerable to a
+    flaw which players can exploit to solve our new challenge, let's actually add a new instance of that version of
+    FumbleChain.
+
+    To do that, we will edit <code>docker-compose.yml</code>. We will add a new service called
+    <code>mainnet1337-node</code>.
+
+    <code>
+<pre>mainnet1337-node:
+    build:
+      context: ../..
+      dockerfile: src/fumblechain/docker/challenge1337/mainnet1337-node/Dockerfile
+    ports:
+      - "${CH1337_MAINNET_NODE_PORT}:${CH1337_MAINNET_NODE_PORT}"
+    environment:
+      - CH1337_MAINNET_NODE_PORT</pre>
+    </code>
+
+    Now we must also create the file <code>docker/challenge1337/mainnet1337-node/Dockerfile</code> referenced above. One
+    can have a look at other files in the <code>docker</code> directory for examples.
+</p>
+
+<h5>Making it all work together</h5>
+
+<p>
+    There are a couple things missing for our challenge to be playable. We must write the actual contents of the
+    challenge instructions (remember the HTML file we referenced).
+</p>
+
+<p>
+    We also need to pass the <code>NEW_CHALLENGE_PRODUCT_NODE_API_URL</code> environment variable to the application and
+    use that URL within the challenge description so that players know which blockchain instance to connect to for this
+    challenge. This variable must be specified in <code>docker-compose.yml</code>, in the <code>fumblestore</code>
+    service's <code>environment</code> block.
+
+    <code>
+<pre>  fumblestore:
+    build:
+      context: ../..
+      dockerfile: src/fumblechain/docker/fumblestore/Dockerfile
+    ports:
+      - "${FUMBLESTORE_PORT}:${FUMBLESTORE_PORT}"
+    environment:
+      - CHALLENGE1_PRODUCT_NODE_API_URL=http://mainnet-node:1337
+      - CHALLENGE2_PRODUCT_NODE_API_URL=http://mainnet2-node:1337
+      - CHALLENGE3_PRODUCT_NODE_API_URL=http://mainnet3-node:1337
+      - NEW_CHALLENGE_PRODUCT_NODE_API_URL=HTTP://mainnet1337-node:1337
+      [...]
+      # challenge 1337
+      - CHALLENGE1337_MAINNET1337_NODE_URL=${FC_HOST}:${CH1337_MAINNET_NODE_PORT}
+      - CHALLENGE1337_MAINNET1337_NODE_HOST=mainnet1337-node
+      - CHALLENGE1337_MAINNET1337_MAGIC=${CH1337_MAINNET_MAGIC}</pre>
+    </code>
+
+    Note that we referenced some other variables which can be defined in the <code>.env</code> file:
+
+    <code>
+<pre># Challenge 1337
+CH1337_MAINNET_NODE_PORT=31337
+CH1337_MAINNET_MAGIC=13333333337</pre>
+    </code>
+</p>
+
+<p>
+    Note that more complex challenges where more than one instance can be implemented by adding additional services in
+    <code>docker-compose.yml</code>. The sky's the limit.
+
+    Also make sure that any vulnerability you introduce for you new challenge should only be exploitable on your new
+    challenge and not on the other challenges!
+</p>
+
+<p>
+    That's all you will need to build your own challenges. Happy hacking!
+</p>

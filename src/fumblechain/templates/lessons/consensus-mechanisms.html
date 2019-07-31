@@ -1,0 +1,308 @@
+<p>
+    In this lesson, we will talk about consensus mechanisms.
+</p>
+
+<p>
+    In a blockchain network, nodes exchange transactions and blocks.
+    In order for the system to make sure all nodes are synchronized and agree on the state, which is modified by
+    transactions and verified in batches (blocks), as well as be resistant to malicious nodes who could send non-genuine
+    blocks containing one or many fake transactions, it needs to provide a mechanism that makes all peers on the network
+    come to an agreement.
+    Such mechanisms are called consensus mechanisms and there exist many of these. We will talk about a few.
+</p>
+
+<p>
+    A distributed ledger (blockchain) whose nodes blindly trust any received block to be valid is not <a
+        href="https://en.wikipedia.org/wiki/Byzantine_fault">Byzantine Fault Tolerant</a> (BFT).
+    This name (BFT) comes from the Byzantine Generals Problem.
+</p>
+
+<h5>Byzantine Generals Problem</h5>
+
+<p>
+    This problem was first described in a <a
+        href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.126.9525&rep=rep1&type=pdf">1982 paper</a>.
+    The idea of that problem is the following.
+    There are <strong>N</strong> generals.
+    A commander general must send an order to his <strong>N-1</strong> lieutenant generals.
+    The order is either "attack" or "retreat".
+    However, any general can be either loyal or a traitor. In other means, it can either tell the other generals the
+    exact order he received or lie and tell something else.
+    This problem is solved by choosing the majority of the orders received for each general. This way, the system can
+    still reach a consensus where everyone agrees on the order if no more than 1/3 of the generals are traitors.
+    A system which tolerates up to one third of traitors is said to be Byzantine fault tolerant (BFT).
+</p>
+
+<h5>Blockchain Consensus mechanisms</h5>
+
+<p>
+    This concept was more recently applied to blockchains and there are multiple ways to achieve Byzantine Fault
+    Tolerance. In the context of blockchains, the generals are actually the nodes in the network.
+    When the <a href="https://bitcoin.org/bitcoin.pdf">Bitcoin whitepaper</a> was <a
+        href="http://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html">released</a> in 2008, Proof of
+    Work was the solution to the Byzantine Generals Problem for Bitcoin.
+</p>
+
+<p>
+    The most famous blockchain mechanisms are <strong>Proof of Work</strong> (<a href="https://bitcoin.org">Bitcoin</a>,
+    <a href="https://www.ethereum.org/">Ethereum</a>) and <strong>Proof of Stake</strong> (<a
+        href="https://peercoin.net/">Peercoin</a>,
+    <a href="https://www.cardano.org">Cardano</a> and soon Ethereum as well).
+    There are, however, many more than that. Let's dig into some of these in more details.
+    Also, it is worth mentioning that most people consider PoW and PoS as consensus mechanisms.
+    However, it <a href="https://medium.com/tendermint/a-to-z-of-blockchain-consensus-81e2406af5a3">was discussed</a>
+    that they are actually not consensus mechanisms by themselves.
+    They need to be combined with, for example the longest chain rule to achieve consensus.
+</p>
+
+<strong>Table of contents</strong>
+
+<ul>
+    <li><a href="#pow">Proof of Work (PoW)</a></li>
+    <li><a href="#pos">Proof of Stake (PoS)</a></li>
+    <li><a href="#dpos">Delegated Proof of Stake (DPoS)</a></li>
+    <li><a href="#poa">Proof of Authority (PoA)</a></li>
+    <li><a href="#others">Others</a></li>
+    <li><a href="#conclusions">Conclusions</a></li>
+    <li><a href="#see-also">See also</a></li>
+</ul>
+
+<h5><a name="pow">Proof of Work (PoW)</a></h5>
+
+<p>
+    Bitcoin popularized the Proof of Work mechanism. It consists of solving a hard (computationally intensive)
+    mathematical problem before being able to add a block to the chain.
+    The winner gets the chance of submitting a block to be added to the chain.
+    It is however very easy to verify that the solution to the problem is correct.
+    Generally, this mathematical problem is finding a number such that hashing the block header plus that number gives a
+    hash which is smaller than a given target. The smaller the target is, the harder it is to find such a number.
+    In the other hand, when such a number has been found, anyone can simply re-compute the hash of the block header and
+    that number and verify that it is smaller than the target.
+    The process of finding such a number is called <strong>mining</strong> and it involves trying lots of possibilities
+    for such a number and computing the hash of the block header plus the number until we find one for which the hash is
+    less than the target.
+    This is equivalent to trying to guess a number between 0 and a very large number.
+    The more computation power we have, the more guesses per second we can do.
+    However, it is still possible to guess the right answer on the first try, but that is very unlikely.
+</p>
+
+<p>
+    Nodes in the network are in competition for mining blocks.
+    The first node who mines a block can broadcast it and will receive a mining reward only if the block is valid.
+    The reward is an economic incentive to behave properly.
+    The block will be validated by nodes in the network.
+    In case a node broadcasts a block which does not validate, it will simply be rejected by nodes on the network.
+</p>
+
+<p>
+    If two nodes mine a block at the same time (two different blocks, but blocks that refer to the same previous block
+    in the chain), the network will temporarily split into two.
+    The nodes hearing first (due to network latencies) about the first block will accept it and the nodes hearing first
+    about the second block will also accept it, creating two momentary chains.
+    However, it is nearly impossible that further blocks continue to be mined at exactly the same time.
+    At some point, the nodes in one of the chains will have more computing power than the nodes in the other chain and
+    will mine blocks faster than the other, leading to being the longest chain (the one with the most blocks).
+    Blocks in the shortest chain will be rejected and nodes who were not on the longest chain have an incentive to
+    synchronize back with the longest chain.
+    This is known as the Nakamoto consensus. The name comes from <a
+        href="https://en.wikipedia.org/wiki/Satoshi_Nakamoto">Satoshi Nakamoto</a>, the nickname of the person or
+    organization who created Bitcoin.
+    The true identity of Satoshi Nakamoto remains unknown to this day.
+</p>
+
+<strong>Attacks</strong>
+
+<p>
+    The Proof of Work mechanism works as long as a majority of honest nodes run the network.
+    One common attack is the 51% attack.
+    If an entity can obtain more than half of the network CPU power, then it can mine blocks faster than anyone else,
+    thus is able to rewrite history in the chain.
+    Therefore, state immutability cannot be guaranteed anymore.
+    Attacks such as double spending then become possible.
+    Indeed, the attacker could first make a transaction to buy some goods on the internet, then use its CPU power to
+    revert that transaction, therefore having its coins back and keeping the goods.
+</p>
+
+<strong>Pros and Cons</strong>
+
+<p>
+<ul>
+    <li><code>[+]</code> PoW solves the double spending problem as long as honest nodes have the majority of CPU power.
+    </li>
+    <li><code>[-]</code> CPU resource consumption is extremely high. It is estimated that the Bitcoin network's total
+        energy consumption is <a href="https://digiconomist.net/bitcoin-energy-consumption">more than that of
+            Switzerland</a> as of May 2019 (more than 60 TWh per year).
+    </li>
+    <li><code>[-]</code> Maximum transaction rate is small.</li>
+</ul>
+</p>
+
+
+<h5><a name="pos">Proof of Stake (PoS)</a></h5>
+
+<p>
+    Proof of Stake takes another approach to consensus. It was first used in the <a href="https://peercoin.net/">Peercoin</a>
+    network in 2012.
+    Nodes participating in a proof of stake network are called <strong>validators</strong> or <strong>minters</strong> and not
+    miners as in Proof of Work.
+    The validator who gets to create the next block is randomly selected with some probability that depends on some
+    criteria, including how many coins they staked and how long the coins have been staked.
+    In Peercoin, the combination of both criteria is called coin age.
+    For example, for Ethereum Casper (a work in progress Proof of Stake version of Ethereum), the participants also need
+    to have a node online. If not, they can be punished.
+</p>
+
+<p>
+    Any validator can decide to lock up some of their coins (stake them).
+    In general, the more coins you stake, the higher the chances are of being selected to produce the next block.
+    Selected validators are rewarded with all or part of the transaction fees if they follow the protocol rules or are
+    punished if misbehaving.
+</p>
+
+<p>
+    Unlike Proof of Work, this mechanism does not require a lot of CPU resources to work.
+    To perform a 51% attack, one would need to possess the majority of all existing coins on the blockchain.
+    From an attacker's standpoint it is probably much more expensive to buy half of the existing coins than to buy the
+    necessary CPU power to perform an attack.
+</p>
+
+<strong>Attacks</strong>
+
+<p>
+    While the 51% attack is still possible, it becomes harder to perform than on Proof of Work systems, considering that
+    the majority of coins will be more expensive than buying
+    the majority of CPU power.
+</p>
+
+<p>
+    In early implementations of PoS, there was a problem known as the <strong>Nothing at stake</strong> problem, where
+    validators could simply stake their coins on all forks of the blockchain and had nothing to lose.
+    This behaviour would prevent the chain from reaching consensus.
+    However, more recent implementations of the Proof of Stake mechanism include a way to punish validators who stake
+    coins on blocks being part of the "wrong" chain. They would lose their stake if doing so.
+</p>
+
+<strong>Pros and Cons</strong>
+
+<p>
+<ul>
+    <li><code>[+]</code> Energy efficient. Does not require as much CPU power as Proof of Work.</li>
+    <li><code>[+]</code> It is people who actually own coins that create blocks. There is less incentive to attack a
+        network for which you own a lot of coins already.
+    </li>
+    <li><code>[+]</code> High maximum transaction rate.</li>
+    <li><code>[-]</code> If not designed properly, problems such as the Nothing at stake issue can arise.</li>
+    <li><code>[-]</code> Implementation may be more complex than Proof of Work.</li>
+</ul>
+</p>
+
+
+<h5><a name="dpos">Delegated Proof of Stake (DPoS)</a></h5>
+
+<p>
+    The Delegated Proof of Stake mechanism is a variant of the PoS mechanism. Famous projects leveraging DPoS include
+    <a href="https://bitshares.org/">Bitshares</a> and <a href="https://eos.io/">EOS</a>.
+</p>
+
+<p>
+    With DPoS, not anyone can directly produce a block.
+    <strong>Block producers</strong> must first be elected by nodes.
+    The election is deterministically repeated every N blocks so that it is impossible for malicious elected nodes to
+    produce blocks for too long.
+    Plus, there is always an odd number of elected block producers to prevent tied votes.
+</p>
+
+<p>
+    These block producers can only produce blocks at deterministically pre-defined times.
+    A block which was not produced at an universally accepted time is considered invalid by the network.
+</p>
+
+<p>
+    Consensus is then achieved in the same way as in PoS with the difference that blocks are produced by a group of
+    elected nodes, which is shuffled every N blocks.
+</p>
+
+<strong>Pros and Cons</strong>
+
+<p>
+<ul>
+    <li><code>[+]</code> High maximum transaction rate. About 1 second to confirm a transaction, on average.</li>
+    <li><code>[-]</code> Arguably high level of centralization due to the small number of delegates who produce blocks.
+    </li>
+</ul>
+</p>
+
+
+<h5><a name="poa">Proof of Authority (PoA)</a></h5>
+
+<p>
+    Proof of Authority is a consensus mechanism suited to <a href="/lessons/999">permissioned</a> blockchains.
+    It tries to fix a problem that is inherent to Proof of Stake observed by Proof of Authority enthusiasts, namely,
+    block validators remain anonymous and can re-join the network as many times as they want even if they previously
+    misbehaved.
+</p>
+
+<p>
+    PoA solves this problem by tightly linking each user's actions to their identity.
+    The incentive for validators is that since their identity is linked to their activities, their
+    <strong>reputation</strong> is damaged if they misbehave.
+    Thus, once someone has misbehaved, they will never be able to come back. Additionally, the system relies on the fact
+    that to first enter the network, a user must have his identity thoroughly inspected and validated.
+    That makes it hard/impossible to join the network with a fake identity.
+</p>
+
+<p>
+    One problem of such a system is that it requires a central authority that validates identities.
+    It is therefore, in general, not suitable for permissionless blockchains, where the whole point is to have a fully
+    decentralized and trustless system.
+</p>
+
+<strong>Pros and Cons</strong>
+
+<p>
+<ul>
+    <li><code>[+]</code> Very low computing power usage</li>
+    <li><code>[+]</code> High transaction rate</li>
+    <li><code>[-]</code> Unsuitable for non-enterprise applications</li>
+</ul>
+</p>
+
+
+<h5><a name="others">Others</a></h5>
+
+<p>
+    There exist many other consensus mechanisms. We will only name a few of these:
+
+<ul>
+    <li>Proof of Elapsed Time (<a href="https://sawtooth.hyperledger.org/">Hyperledger Sawtooth</a>)</li>
+    <li>Proof of Capacity (<a href="https://www.burst-coin.org/">Burstcoin</a>, to some extent <a
+            href="https://www.chia.net/">Chia</a>)
+    </li>
+    <li>Proof of Burn (<a href="http://slimco.in/">Slimcoin</a>)</li>
+    <li>Tendermint (<a href="https://tendermint.com/docs/introduction/what-is-tendermint.html#consensus-overview">Tendermint</a>)
+    </li>
+    <li>Practical Byzantine Fault Tolerance</li>
+    <li>etc.</li>
+</ul>
+</p>
+
+<h5><a name="conclusions">Conclusions</a></h5>
+
+<p>
+    No consensus mechanism is better than the other. They all have advantages and drawbacks.
+    Knowing about the various mechanisms out there and how they work can be useful.
+    When designing a blockchain, the features your system requires will drive the choice of consensus mechanism.
+    That concludes this lesson about consensus mechanisms.
+</p>
+
+
+<h5><a name="see-also">See also</a></h5>
+
+<ul>
+    <li><a href="https://medium.com/tendermint/a-to-z-of-blockchain-consensus-81e2406af5a3">A-to-Z of Blockchain
+        Consensus</a> (Feb 2019)
+    </li>
+    <li><a href="https://steemit.com/dpos/@dantheman/dpos-consensus-algorithm-this-missing-white-paper">DPOS Consensus
+        Algorithm - The Missing White Paper</a> (May 2017)
+    </li>
+</ul>

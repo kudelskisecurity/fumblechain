@@ -1,0 +1,31 @@
+<p>
+    In this lesson we will explain how to use FumbleChain's Blockchain explorer.
+</p>
+
+<p>When running the FumbleChain daemon as explained in the challenges, the blockchain explorer is enabled by default. If
+    you're running the <code>daemon.py</code> script directly, you need to pass the <code>--explorer</code> argument to
+    enable it. By default the explorer will listen on port 20601 but this can be changed with the
+    <code>--explorer-port</code> argument.
+</p>
+
+<p>
+    When running via <code>fc-docker.sh</code> as explained in challenges, the explorer port is the one specified with
+    the <code>-E</code> option.
+</p>
+
+<p>
+    In summary, the full command to enable the explorer when running <code>daemon.py</code> directly is <kbd>./daemon.py
+    --explorer start</kbd>.
+</p>
+
+<p>
+    The Blockchain explorer is a great tool to visually explore blocks, transactions, blockchain parameters such as the
+    magic and current target, as well as inspect the full transaction history for specific wallet addresses.
+</p>
+
+<p>If you already ran the <code>fc-docker.sh</code> command from a challenge, then the daemon should be running and the
+    blockchain explorer should be available at
+    <a target="_blank" href="http://localhost:20601">http://localhost:20601</a>.
+</p>
+
+<p>That concludes this lesson about the Blockchain explorer.</p>

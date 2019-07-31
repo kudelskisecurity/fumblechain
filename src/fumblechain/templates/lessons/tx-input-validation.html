@@ -1,0 +1,30 @@
+<p>
+    In this lesson we will talk about transaction input validation.
+</p>
+
+<p>
+    Transaction input validation is extremely important. One common mistake that can be seen is that the transaction
+    amount checks are similar to:
+
+    <code><pre>
+if tx.quantity <= wallet.balance:
+        # transaction ok
+else:
+        # reject transaction</pre>
+    </code>
+
+    However, with such a check, one can create a transaction from oneself to oneself with a negative amount, which won't be caught by the
+    check above. Thus creating coins out of thin air:
+
+    <code>
+<pre>
+    Transaction id: 1234
+    Source: myself
+    Destination myself
+    Amount: -9999999
+</pre>
+    </code>
+
+    A simple protection against this is to make sure that transaction amounts are greater than zero.
+</p>
+

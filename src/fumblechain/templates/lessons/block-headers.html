@@ -1,0 +1,69 @@
+<p>
+    In this lesson we will talk about what's in a block, including the header and the list of transactions.
+</p>
+
+<p>
+    A blockchain is composed of blocks. Each blocks contains transactions.
+    However, for the system to work, slightly more information than that needs to be stored in each block.
+    We will now describe what additional information is stored inside of blocks and why that is the case.
+</p>
+
+<p>
+    Blocks usually contain a block number, sometimes called <em>block height</em>.
+    This number is incremented by one for every new block added to the chain.
+    This is useful because it directly tells us the block number.
+    Assuming that we are working with the very latest block, its number tells us how many blocks are in the chain.
+</p>
+
+<p>
+    The hash of the previous block is used to link the block to the previous block.
+    Of course, blocks also have a hash, so that the next block's previous hash can be set to this block's hash to
+    enlarge the chain.
+</p>
+
+<p>
+    The timestamp at which the block has been created is also stored in a block.
+    This is useful to store the date and time at which transactions have been performed.
+    Especially since transactions do not have a timestamp, usually.
+    Blocks have a timestamp.
+    Every transaction in the same block is considered to have happened at the same time.
+</p>
+
+<p>
+    In the case of a <a href="/lessons/1000">Proof of Work</a> blockchain, a <em>nonce</em> is added to the block
+    structure. The nonce is a random value that miners successively change to make the block hash change so that it is
+    less than the target hash required for the block to be successfully mined.
+</p>
+
+<p>
+    Finally, the transactions are stored in a block.
+    They are, however, stored in a special structure and not in a simple list.
+    This special structure used for storing transactions is usually a
+    <a href="https://en.wikipedia.org/wiki/Merkle_tree">Merkle Tree</a>.
+    This structure has some properties that blockchains can benefit from to increase performance, such as:
+
+<ul>
+    <li>It computes a hash of transaction hashes, grouped 2 by 2. That means that the root hash can be computed
+        iteratively, as transactions are received by network nodes.
+    </li>
+    <li>It allows for quickly proving the integrity of all the transactions in a block.</li>
+    <li>It allows for efficient comparison of the list of transactions in a block. Indeed, if the root hashes do not
+        match, one can request the two sub hashes and compare those, and so on so we only have to transfer few hashes
+        over the network and not the full transactions themselves to perform a comparison.
+    </li>
+</ul>
+</p>
+
+<p>
+    In summary, the block header is composed of:
+
+<ul>
+    <li>block number</li>
+    <li>previous block hash</li>
+    <li>timestamp</li>
+    <li>nonce</li>
+    <li>merkle tree root hash</li>
+</ul>
+
+That concludes this lesson about block contents.
+</p>

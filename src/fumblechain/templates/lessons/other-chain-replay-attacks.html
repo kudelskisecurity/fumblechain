@@ -1,0 +1,37 @@
+<p>
+    In this lesson we will explain what is an other chain replay attack, in which case they can happen and how to avoid
+    them.
+</p>
+
+<p>
+    As we have seen, a transaction in the blockchain contains at least a source address, a destination address, an
+    amount and a signature. The signature is usually a signed hash of the transaction's data, signed with the sender's
+    private key. This allows to validate that this transaction has been initiated by the wallet owner, and nobody else.
+</p>
+
+<p>
+    Now, let's see what a hard fork is. A hard fork is made on a blockchain whenever a major change in the protocol
+    happens, either through a new version of the client (Bitcoin / Bitcoin Cash for example) or to invalidate
+    vulnerability-related transactions (Ethereum DAO for example).
+    When a hard fork happens, two blockchains emerge, but with a common "ancestor" chain. What happens to your previous
+    coins then? Well, you usually find yourself having the same amount of currencies on both chains (That's what
+    happened with the BTC/BCH fork).
+</p>
+
+<p>
+    Now let's say that you are creating a transaction on one of the chains. Since the signature is based on the
+    transaction data (source, destination, amount, maybe time) it is possible to copy this transaction and replay it
+    verbatim on the other chain. The signature will still be valid, but you never created this transaction.
+</p>
+
+<p>
+    To protect against this, FumbleChain (as well as other blockchains) uses a magic value that is bound to the current
+    blockchain. Each transaction contains this magic value and is part of the signed hash. In that case, any fork must
+    use a different magic value to protect against other chain replay attacks.
+</p>
+
+<p>
+    To test this by yourself, take on <a href="/product/flag1">challenge 1</a> and try to use this attack to get the
+    flag.
+</p>
+

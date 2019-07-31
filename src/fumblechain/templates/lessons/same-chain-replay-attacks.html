@@ -1,0 +1,22 @@
+<p>
+    In this lesson we will talk about same-chain replay attacks. Same-chain replay attacks are similar to <a
+        href="/lessons/2001">other-chain replay attacks</a>, but are a different kind of replay attack.
+</p>
+
+<p>
+    This attack works by replaying an existing transaction multiple times.
+    It works only when there is no check for transaction uniqueness within a blockchain.
+</p>
+
+<p>
+    When no such check is implemented, as long as someone sent you any amount of coins, you have a valid signed
+    transaction that gives you some money.
+    Since transactions are not checked to be unique, one can replay that transaction multiple times, until that person's
+    wallet is completely drained.
+</p>
+
+<p>
+    To protect against this attack one must make sure that transactions are unique within the blockchain. Any duplicate
+    transaction must be rejected. In practice, this is achieved by including a so-called "nonce" (a unique value) to the
+    transaction structure.
+</p>

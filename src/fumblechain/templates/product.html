@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.title }} - FumbleStore{% endblock %}}
+
+{% block center %}
+
+<div class="product-container">
+    <div class="product product-header">
+
+        <p>
+            {% if owned %}
+        <h2><span class="badge badge-success">Completed</span></h2>
+        {% endif %}
+
+        <h1>{{ product.title }}</h1>
+        </p>
+
+        <p>
+            <small>Solved {{ product_owners_count }} time{{product_owners_count | pluralize}}</small>
+        </p>
+
+    </div>
+
+    <div class="product-grid">
+
+        <div class="product product-main">
+            <p>
+                <strong>Description</strong>
+            </p>
+            {% if product.description_file %}
+            {% include product.description_file %}
+            {% else %}
+            <p>Description not available.</p>
+            {% endif %}
+
+
+        </div>
+
+        <div class="product-side">
+
+            <div class="product product-details product-side-item product-side-item-margin">
+                <p>
+                    <strong>Challenge details</strong>
+                </p>
+                <p>
+                <ul>
+                    <li>
+                        <small>Price: {{ product.price | price }} FumbleCoins</small>
+                    </li>
+                    <li>
+                        <small>Solved {{ product_owners_count }} time{{product_owners_count | pluralize}}
+                            {% if pus %}
+                            (
+                            {% for solver in pus %}
+                            {{solver.username}}{{ "," if not loop.last }}
+                            {% endfor %}
+                            )
+                            {% endif %}
+                        </small>
+                    </li>
+                </ul>
+
+                </p>
+
+            </div>
+            <div class="product product-hint product-side-item product-side-item-margin">
+                <p>
+                    <strong>Are you stuck?</strong>
+                </p>
+
+                <a href="/product/{{ product.short }}/hint" class="btn btn-primary">Show hint
+                </a>
+
+            </div>
+            <div class="product product-purchase product-side-item-margin">
+
+                <p>
+                    <strong>Purchase</strong>
+                </p>
+                {% if owned %}
+
+                <p>
+                    Thank you for purchasing this product!
+                </p>
+                <p>
+                    Flag: {{ product.secret_flag }}
+                </p>
+
+                {% else %}
+
+                {% if user %}
+
+                <form method="POST" action="/buy/{{ product.short }}">
+                    <input type="submit" value="Buy for {{ product.price | price }} FC" class="btn btn-primary"/>
+                </form>
+
+                {% else %}
+
+                <p>Please <a href="/login">Sign in</a> to purchase this product.</p>
+
+                {% endif %}
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,104 @@
+<p>
+    In this lesson, we will describe floating-point attacks.
+</p>
+
+<h4>Floating-point underflow</h4>
+
+<p>
+    Assume that you own a wallet with a balance of 10 FumbleCoins and your friend has an empty wallet (with zero
+    FumbleCoins). Let's say you send 0.1 FumbleCoins to a friend. You will then have 9.9 FumbleCoins left and your
+    friend's wallet will have 0.1 FumbleCoins.
+</p>
+
+<table class="table table-striped table-sm">
+    <caption>Send 0.1 FumbleCoins to a friend</caption>
+    <thead class="table-dark">
+    <tr>
+        <th>Wallet</th>
+        <th>Before tx</th>
+        <th>After tx</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+        <td>You</td>
+        <td>10 FC</td>
+        <td>9.9 FC</td>
+    </tr>
+    <tr>
+        <td>Your friend</td>
+        <td>0 FC</td>
+        <td>0.1 FC</td>
+    </tr>
+    </tbody>
+</table>
+
+<p>
+    Notice how the wallet balance is updated by adding or subtracting the transaction amount. What would happen if we
+    add or subtract numbers that are either really small or really large?
+</p>
+
+<p>
+    If the blockchain does not perform floating-point number overflow or underflow checks, it is possible to exploit the
+    system and produce coins out of thin air.
+    Indeed, imagine that we make a transaction and send <strong>1e-17</strong> FumbleCoins to our friend. Apparently,
+    Python (FumbleChain is written in Python) will subtract nothing from our balance (this is a rounding error with
+    small values) but will credit the small amount to our friend's balance.
+</p>
+
+<table class="table table-striped table-sm">
+    <caption>Send 1e-17 FumbleCoins to a friend</caption>
+    <thead class="table-dark">
+    <tr>
+        <th>Wallet</th>
+        <th>Before tx</th>
+        <th>After tx</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+        <td>You</td>
+        <td>10 FC</td>
+        <td>10 FC</td>
+    </tr>
+    <tr>
+        <td>Your friend</td>
+        <td>0 FC</td>
+        <td>1e-17 FC</td>
+    </tr>
+    </tbody>
+</table>
+
+<p>
+    Repeatedly making such transactions will create free coins. However, to produce just one FumbleCoin it will take a
+    lot of transactions. In that case, it may be faster to spend the CPU resources to mine a block and grab the reward.
+</p>
+
+<h4>Floating-point overflow</h4>
+
+<p>
+    This concept can be extended to large numbers. Successively adding numbers together, such as when a wallet receives
+    a lot of FumbleCoins, will make that wallet's balance grow larger and larger. If it continues to grow larger for a
+    while and reaches Python's maximum value for floating-point numbers (somewhere around <strong>2**1023</strong>),
+    unexpected behaviors will happen.
+    Indeed, Python will return infinity when adding two floating point numbers that produce a floating-point number
+    larger that its maximum value.
+</p>
+
+<code>
+    <pre>Python 3.7.2+ (default, Feb 27 2019, 15:41:59)
+[GCC 8.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> float(2**1023)+float(2**1023)
+inf</pre>
+</code>
+
+<p>
+    This vulnerability can be leveraged to create a wallet with an infinite amount of FumbleCoins.
+</p>
+
+<p>
+    To protect against these attacks, the system should enforce a minimum and maximum value for transaction amounts.
+</p>

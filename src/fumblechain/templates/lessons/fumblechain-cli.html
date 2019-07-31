@@ -1,0 +1,188 @@
+<p>
+    In this lesson we will learn how to use the FumbleChain command-line interface tool that is embedded in <a
+        href="/static/downloads/fumblechain.tar.gz">the .tar.gz archive</a> found in <a
+        href="/product/flag1">Challenge1</a>.
+</p>
+
+<p>
+    To start the tool, simply run <kbd>./cli.py</kbd>. Note that when playing the challenges you should run it using the
+    docker wrapper as explained in the challenge descriptions. To run <code>cli.py</code> directly you will have to
+    install Python 3.7+ and the required modules with <kbd>pip3 install -r requirements.txt</kbd>. <code>cli.py</code>
+    connects to a running <code>daemon.py</code> instance. By default it will try to connect to <code>http://localhost:1337</code>.
+    This can be changed with the <code>--api-url</code> option. Once you run it, you will be
+    prompted with the following message:
+</p>
+
+<code>
+    <pre>
+$ ./cli.py
+Using API: http://localhost:1337/
+================================
+FumbleChain v0.1a
+Type help or ? to list commands.
+================================
+fumblechain >
+</pre>
+</code>
+
+<p>
+    Type <kbd>help</kbd> at the CLI prompt to get a list of all available commands:
+</p>
+
+<code>
+    <pre>
+fumblechain > help
+
+Documented commands (type help <topic>):
+========================================
+EOF        debug  mine  show         transaction_raw
+block_raw  help   quit  transaction  wallet</pre>
+</code>
+
+<p>
+    We will now go through a regular scenario to introduce all the commands.
+</p>
+
+<p>
+    First, let's create a new wallet with <kbd>wallet generate</kbd>.
+</p>
+
+<code>
+    <pre>fumblechain > wallet generate</pre>
+</code>
+
+<p>
+    That wallet can be saved to disk with <kbd>wallet save my_wallet.wallet</kbd> and later loaded again with <kbd>wallet
+    load my_wallet.wallet</kbd>.
+</p>
+
+<p>
+    To display the wallet address and current balance, type <kbd>wallet show</kbd>:
+</p>
+
+<code>
+    <pre>fumblechain > wallet show
+Wallet info
+Address: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZE1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTEFEQ0Jod0tCZ1FDM2VrbVNxYURTMEdKUWNUc3JBUTU1cmNFNAp1dUNpSFlub01PejN2YkxEMEkwSWgyT0N4Q01wL0QyWkR3RVNIN3dpU0dvNTIxZk5jRGZNTi9FUEJIR3dwYVo5CnZsaUF1MC9kd1RTaHhzcmhwdmFBcStTNWtESWZzVnBzek90UUNSdk15SC8xazdSRnRBNWhJaXZ6b2VHbnNYREoKWkY5NE9QZUc5ZCtjeGJSMStRSUJBdz09Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=
+Balance: None</pre>
+</code>
+
+<p>As you may see, the current balance is None. This is the default balance for all wallet addresses that never received
+    any FumbleCoins. FumbleCoin is the name of the cryptocurrency implemented in FumbleChain.</p>
+
+<p>
+    Let's make some money by mining a new block with <kbd>mine start</kbd>:
+</p>
+
+<code>
+    <pre>fumblechain > mine start
+Starting miner
+fumblechain >
+[info] Successfully mined block</pre>
+</code>
+
+<p>
+    Now let's check our wallet balance once more:
+</p>
+
+<code>
+    <pre>fumblechain > wallet show
+Wallet info
+Address: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZE1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTEFEQ0Jod0tCZ1FDM2VrbVNxYURTMEdKUWNUc3JBUTU1cmNFNAp1dUNpSFlub01PejN2YkxEMEkwSWgyT0N4Q01wL0QyWkR3RVNIN3dpU0dvNTIxZk5jRGZNTi9FUEJIR3dwYVo5CnZsaUF1MC9kd1RTaHhzcmhwdmFBcStTNWtESWZzVnBzek90UUNSdk15SC8xazdSRnRBNWhJaXZ6b2VHbnNYREoKWkY5NE9QZUc5ZCtjeGJSMStRSUJBdz09Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=
+Balance: 1</pre>
+</code>
+
+<p>
+    We just received 1 FumbleCoin as a reward for successfully mining a block. This block can be inspected with the
+    <kbd>show block &lt;block_id&gt;</kbd> command. Let's see what is in the very first block with <kbd>show block
+    0</kbd>:
+</p>
+
+<code>
+    <pre>fumblechain > show block 0
+
+============================================
+Block       #0
+Hash:       115410170253468192037178135221315502767
+Previous:   0
+Target:     1329227995784915872903807060280344575
+Merkle tree:d41d8cd98f00b204e9800998ecf8427e
+Timestamp:  Wed Dec 12 16:05:00 2018
+
+Transactions:
+============================================</pre>
+</code>
+
+<p>
+    The very first block of the Blockchain is also called the genesis block. Now let's inspect the latest block (the one
+    we just mined) with <kbd>show block -1</kbd>. Here <code>-1</code> refers to the latest block:
+</p>
+
+<code>
+    <pre>fumblechain > show block -1
+
+============================================
+Block       #1
+Hash:       639778059030680034186788579039020453
+Previous:   115410170253468192037178135221315502767
+Target:     1329227995784915872903807060280344575
+Merkle tree:1eefc3c3b16dd6fd7701e9d8ec973528
+Timestamp:  Mon Apr  1 12:54:08 2019
+
+Transactions:
+--------------------------------------------
+Transaction:ff0ad19d-70c3-44a0-9e01-e41af2c90d35
+Hash:       3336e4547f8791b89b0f330e8dc68558
+Source:     0
+Destination:LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZE1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTEFEQ0Jod0tCZ1FDM2VrbVNxYURTMEdKUWNUc3JBUTU1cmNFNAp1dUNpSFlub01PejN2YkxEMEkwSWgyT0N4Q01wL0QyWkR3RVNIN3dpU0dvNTIxZk5jRGZNTi9FUEJIR3dwYVo5CnZsaUF1MC9kd1RTaHhzcmhwdmFBcStTNWtESWZzVnBzek90UUNSdk15SC8xazdSRnRBNWhJaXZ6b2VHbnNYREoKWkY5NE9QZUc5ZCtjeGJSMStRSUJBdz09Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=
+Amount:     1
+Signature:  None
+--------------------------------------------
+============================================</pre>
+</code>
+
+<p>
+    Now, let's send some FumbleCoins to a friend with the <kbd>transaction</kbd> command:
+</p>
+
+<code>
+    <pre>fumblechain > transaction
+enter recipient address : my_friends_address
+enter amount : 0.7
+OK</pre>
+</code>
+
+<p>
+    Whenever you create a new transaction, it is broadcast to all the peers on the network. That transaction goes to
+    the transaction pool. Transactions that are in the transaction pool can be listed with the <kbd>debug
+    transaction_pool</kbd> command.
+</p>
+
+<p>
+    When someone starts mining a new block, they will include as many transactions that are in their transaction pool as
+    possible in that block. Blocks have a limit of how many transactions can be fitted into them - this limit is
+    currently set to 256. When a block is successfully mined, the block will be broadcast to peers on the network. If
+    the block is valid, peers will insert that block at the end of their local blockchain and remove transactions that
+    were in their transaction pool and that are in that new valid block.
+</p>
+
+<p>
+    FumbleChain serializes blocks and transactions in JSON format to send them across the network. The FumbleChain CLI
+    offers advanced commands to work with raw JSON blocks or transactions. Show a block's JSON with <kbd>show block_json
+    &lt;block_id&gt;</kbd>. Similary, show a transaction's JSON with <kbd>show transaction_json
+    &lt;transaction_id&gt;</kbd>.
+</p>
+
+<p>
+    There are also advanced commands for broadcasting blocks or transactions from JSON directly. Use
+    <kbd>block_raw</kbd> and <kbd>transaction_raw</kbd> respectively.
+</p>
+
+<p>
+    Also note that the FumbleChain network will automatically adjust mining difficulty depending on how fast blocks have
+    been mined in the past.
+</p>
+
+<p>
+    That sums up this lesson about using the FumbleChain CLI.
+</p>

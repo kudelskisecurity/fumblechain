@@ -1,0 +1,176 @@
+<p>
+    In this lesson, we will talk about attacks on public-key cryptosystems.
+</p>
+
+<p>
+    The security of a wallet in a blockchain is as good as the public-key cryptosystem it uses.
+    For example, FumbleChain uses the RSA cryptosystem for its public and private keys.
+    Bitcoin and Ethereum both use ECDSA with the secp256k1 elliptic curve as their cryptosystem for wallets.
+    Each wallet is composed of a key pair: a public key and a private key.
+    The private key is used for signing transactions.
+    The public key can be used by anyone to verify transaction signatures.
+    That means that your private key should be properly secured.
+    Someone who steals your private key can sign transactions originating from your wallet.
+    In other words, that person can steal money from your wallet.
+</p>
+
+<h4>Attacking RSA</h4>
+
+<p>
+    <a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)">RSA</a> is one of the first public-key cryptosystems and
+    is still widely used nowadays.
+</p>
+
+<p>
+    Using RSA, a private and public key pair is generated in the following way:
+    <br/>
+    1. Choose two large random prime numbers <strong>p</strong> and <strong>q</strong>.
+    <br/>
+    2. Compute <strong>n = p * q</strong> (the public modulus).
+    <br/>
+    3. Choose a number <strong>e</strong> (the public exponent) such that <strong>e</strong> and <strong>λ(n)</strong>
+    are coprime. <strong>λ(n)</strong> is the <a href="https://en.wikipedia.org/wiki/Carmichael_function">Carmichael
+    function</a>.
+    <br/>
+    4. Compute <strong>d</strong> (the private exponent) such that <strong>d</strong> is the modular multiplicative
+    inverse of <strong>e</strong> modulo <strong>λ(n)</strong>. In other words: <strong>d ≡ e^−1 (mod λ(n))</strong>.
+</p>
+
+<p>
+    The public key is the tuple <strong>(n, e)</strong> (the public modulus and the public exponent). The private key is
+    the tuple <strong>(n, d)</strong>.
+</p>
+
+<p>
+    Public keys are secure because it is very hard to retrieve <strong>d</strong> (the private key), knowing only
+    <strong>n</strong> and <strong>e</strong> (the public key).
+    Brute-forcing all possibilities for <strong>p</strong> and <strong>q</strong> so that <strong>n = p * q</strong> is
+    computationally impossible. It would take way too long for large RSA keys (for example 1024 bit and larger,
+    such as the ones used in FumbleChain).
+</p>
+
+<p>
+    There is, however, another way to break public keys in some rare cases where the two large prime numbers described
+    in step 1 above were badly generated. Indeed, if two key pairs are generated such that either <strong>p</strong> or
+    <strong>q</strong> is shared across the two key pairs, then it is possible to break the key and retrieve the private
+    key, just from knowing both public moduli <strong>n1</strong> and <strong>n2</strong>.
+    Consider the example in the table below.
+</p>
+
+<table class="table table-striped table-sm">
+    <caption>Shared factors for two key pairs. The factor q is the same for key 1 and key 2.</caption>
+    <thead class="table-dark">
+    <tr>
+        <th>Public key pair</th>
+        <th>p</th>
+        <th>q</th>
+        <th>n</th>
+        <th>e</th>
+        <th>d</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+        <td>Key 1</td>
+        <td>p1</td>
+        <td><strong>q</strong></td>
+        <td>n1</td>
+        <td>e1</td>
+        <td>d1</td>
+    </tr>
+    <tr>
+        <td>Key 2</td>
+        <td>p2</td>
+        <td><strong>q</strong></td>
+        <td>n2</td>
+        <td>e2</td>
+        <td>d2</td>
+    </tr>
+    </tbody>
+</table>
+
+<p>
+    In such a case, since the public modulus for key 1 <strong>n1 = p1 * q</strong> and the public modulus for key 2
+    <strong>n2 = p2 * q</strong> have the same <strong>q</strong> parameter, it is possible to compute the greatest
+    common divisor (gcd) of <strong>n1</strong> and <strong>n2</strong>. This greatest common
+    divisor should be equal to 1, since <strong>n1</strong> and <strong>n2</strong> should have perfectly random
+    parameters and there should be no shared parameter. However, here we will find that <strong>g = gcd(n1, n2)</strong>
+    is larger than 1 and that it is actually equal to <strong>q</strong>.
+</p>
+
+<p>
+    Therefore, <strong>n1</strong>, <strong>n2</strong> and <strong>q</strong> are now known. We can compute:
+    <br/>
+    <strong>p1 = n1 / q</strong>, and
+    <br/>
+    <strong>p2 = n2 / q</strong>
+</p>
+
+<p>
+    Since we reconstructed the private factors <strong>p</strong> and <strong>q</strong> for both key pairs. We can easily
+    re-compute the private key by using the 4-step procedure described above and re-using <strong>p = p1</strong> and <strong>q
+    = q</strong> for the first key pair. Similary we can use <strong>p = p2</strong> and <strong>q = q</strong> for the
+    second key pair instead of randomly generating them in step 1.
+</p>
+
+<p>
+    Following the 4-step algorithm, we reconstruct private key 1 and private key 2, giving us full access to the
+    associated FumbleChain wallets. If any FumbleCoins were in those wallets, we now own them.
+</p>
+
+<p>
+    In practice, one can build such a private key using the following Python code, which uses the <em>cryptography</em>
+    Python module:
+
+    <code>
+<pre>
+#!/usr/bin/env python3
+
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateNumbers, RSAPublicNumbers
+
+
+def make_private_key(p, q, e=65537):
+    n = p * q
+    public_numbers = RSAPublicNumbers(e, n)
+    m = (p - 1) * (q - 1)
+    d = rsa._modinv(e, m)
+    dmp1 = rsa.rsa_crt_dmp1(d, p)
+    dmq1 = rsa.rsa_crt_dmq1(d, q)
+    iqmp = rsa.rsa_crt_iqmp(p, q)
+    private_numbers = RSAPrivateNumbers(p, q, d, dmp1, dmq1, iqmp, public_numbers)
+    private_key = private_numbers.private_key(default_backend())
+    return private_key
+
+
+def save_to_file(private_key, outfile):
+    pem_data = private_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption()
+    )
+    with open(outfile, "wb") as fout:
+        fout.write(pem_data)
+
+
+if __name__ == '__main__':
+    # reconstruct private key, knowing p and q
+    p = 2**31-2  # large number
+    q = 2**31-2+2409  # large number
+    private_key = make_private_key(p, q)
+
+    # save private key to file, ready for usage with the FumbleChain CLI
+    outfile = "reconstructed.wallet"
+    save_to_file(private_key, outfile)
+</pre>
+    </code>
+</p>
+
+<p>
+    To protect against such an attack. One should make sure that RSA private keys are generated with a secure random
+    number generator which never produces two same numbers. Also we should ensure that no public key pairs within the
+    blockchain have a public modulus N and N2 respectively such that gcd(N, N2) > 1.
+</p>

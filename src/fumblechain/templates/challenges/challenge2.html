@@ -1,0 +1,42 @@
+<p>
+    FumbleCorp was made aware of the the vulnerability present on the mainnet and testnet.
+</p>
+
+<p>
+    A new version of FumbleChain was released and is being tested on mainnet2.
+</p>
+
+<p>
+    FumbleCorp is very proud of its new version of FumbleChain. It is based on industry battle-tested RSA wallets. There
+    is no way that these wallets could be broken.
+</p>
+
+
+<h4>Connecting to mainnet2</h4>
+
+You can re-use the same client as the one used in <a href="/product/flag1">Challenge
+    1</a>. No need to re-download it if you already have it.
+
+To start the node and connect to mainnet2:
+
+<p>
+    <kbd>./fc-docker.sh -n fc-mainnet2 -i fc -p 2224 -P 1339 -E 20603 -H {{ CHALLENGE2_MAINNET2_NODE_URL }} --magic={{
+        CHALLENGE2_MAINNET2_MAGIC}}</kbd>
+</p>
+
+To use the CLI client on mainnet2:
+
+<p>
+    <kbd>docker exec -it fc-mainnet2 ./cli.py --api-url http://localhost:1339</kbd>
+</p>
+
+<p>
+    Once again, your mission is to buy the flag for challenge 2 here on the FumbleStore.
+</p>
+
+<p>
+    Quick links
+    <ul>
+    <li><a href="http://localhost:20603">Mainnet2 explorer</a> (You have to be connected to the mainnet2 for the link to work)</li>
+    </ul>
+</p>

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}{{ lesson.title }} - FumbleStore{% endblock %}}
+
+{% block content %}
+
+<div class="product">
+
+    <h4>{{ lesson.title }}</h4>
+
+    {{ lesson_contents | safe }}
+</div>
+{% endblock %}

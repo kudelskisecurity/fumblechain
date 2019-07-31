@@ -1,0 +1,88 @@
+<p>
+    FumbleCorp inc. introduced its latest innovative blockchain-based product named FumbleChain. It is an
+    infrastructure allowing anyone to securely transfer FumbleCoins, a digital currency.
+</p>
+
+<p>The FumbleChain network (mainnet) is the production network and the one people use to exchange real funds.
+    Developers can use the FumbleChainDev network as a test network (testnet) for building the future of
+    FumbleChain.
+
+</p>
+
+<h4>Client download</h4>
+<p>
+    Download the client here: <a href="/static/downloads/fumblechain.tar.gz">fumblechain.tar.gz</a>
+</p>
+
+<p>Then extract the archive and change to the <code>fumblechain</code> directory:</p>
+
+<p>
+    <kbd>tar xf fumblechain.tar.gz</kbd><br/>
+    <kbd>cd fumblechain</kbd>
+</p>
+
+
+<h4>Connecting to the mainnet</h4>
+
+To start the node and connect to the mainnet:
+
+<p>
+    <kbd>
+        ./fc-docker.sh -p 2222 -n fc-mainnet -i fc -P 1337 -E 20601 -H {{ CHALLENGE1_MAINNET_NODE_URL }}
+    </kbd>
+</p>
+
+<h4>Connecting to the testnet</h4>
+
+To start the node and connect to the testnet:
+<p>
+    <kbd>
+        ./fc-docker.sh -p 2223 -n fc-testnet -i fc -P 1338 -E 20602 -H {{ CHALLENGE1_TESTNET_NODE_URL }} --magic={{
+        CHALLENGE1_TESTNET_MAGIC }}
+    </kbd>
+</p>
+
+<p>Free coins can be requested from the <a target="_blank" href="{{ CHALLENGE1_MONEYMAKER_URL }}">MoneyMaker app</a> on
+    the testnet.</p>
+
+
+<h4>Interacting with the blockchain</h4>
+
+The script <code>cli.py</code> can be used to generate a wallet, make transactions and mine blocks.
+
+Make sure to specify the correct
+<code>--api-url</code> parameter depending on what you chose when running
+<code>daemon.sh</code>. For example, to connect to the daemon connected to the mainnet:
+
+<p>
+    <kbd>
+        docker exec -it fc-mainnet ./cli.py --api-url http://localhost:1337
+    </kbd>
+</p>
+
+Or to connect to the testnet:
+
+<p>
+    <kbd>
+        docker exec -it fc-testnet ./cli.py --api-url http://localhost:1338
+    </kbd>
+</p>
+
+<p>Your mission is the get the flag which is for sale here on the FumbleStore. Note that the store expects
+    real payments, that is from the mainnet.</p>
+
+<h4>Using the blockchain explorer</h4>
+
+<p>
+    After you have started the daemon with one of the <kbd>./fc-docker.sh ... -E &lt;explorer_port&gt;
+    ...</kbd> commands, you may browse <code>http://localhost:&lt;explorer_port&gt;</code> to access to blockchain
+    explorer. Also feel free to have a look at the <a href="/lessons/2">lesson</a> about this tool.
+</p>
+
+<p>
+    Quick links
+    <ul>
+    <li><a href="http://localhost:20601">Mainnet explorer</a> (You have to be connected to the mainnet for the link to work)</li>
+    <li><a href="http://localhost:20602">Testnet explorer</a> (You have to be connected to the testnet for the link to work)</li>
+    </ul>
+</p>

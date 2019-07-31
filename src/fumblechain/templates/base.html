@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% block head %}
+    <title>{% block title %}FumbleStore - Flags for coins{% endblock %}</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}"/>
+    {% block headjs %}
+    {% endblock %}
+    {% endblock %}
+</head>
+
+<body>
+<div class="main-container">
+    <header class="header">
+        <nav class="header-wrapper">
+            <div class="header-main">
+                <a class="home-link" href="/"><h1 class="title">FumbleStore</h1></a>
+            </div>
+
+            <div class="header-links">
+                <a class="header-item header-link header-section-link{% if "challenges" in request.url_rule.endpoint %} active-header-link{% endif %}" href="/challenges">Challenges</a>
+                <a class="header-item header-link header-section-link{% if "lessons" in request.url_rule.endpoint %} active-header-link{% endif %}" href="/lessons">Lessons</a>
+                <a class="header-item header-link header-section-link{% if "scoreboard" in request.url_rule.endpoint %} active-header-link{% endif %}" href="/scoreboard">Scoreboard</a>
+                <a class="header-item header-link header-section-link{% if "faq" in request.url_rule.endpoint %} active-header-link{% endif %}" href="/faq">FAQ</a>
+            </div>
+
+
+            {% block login %}
+            <div class="login">
+                {% if session.user %}
+                Welcome, {{ user.username }}. - <a class="header-link" href="/logout">Sign out</a>
+                {% else %}
+                <a class="header-link" href="/login">Sign in</a>
+                {% endif %}
+            </div>
+            {% endblock %}
+        </nav>
+
+    </header>
+
+    <div class="messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="flashes {{ category }}">
+            <input type="checkbox" id="check{{ loop.index }}"/>
+            <label class="close" title="close" for="check{{ loop.index }}">
+                <i class="icon-remove"></i>
+            </label>
+            <p class="alert-inner">
+                {{ message }}
+            </p>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="center main-block">
+        {% block center %}
+        <div class="wrapper">
+            <div class="content">
+                <p></p>
+                {% block content %}
+                <p>Hello world</p>
+                {% endblock %}
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<p>
+    In this lesson, we will talk about the structure of network messages used by FumbleChain.
+</p>
+
+<p>
+    Network messages are simply messages sent over the network between nodes participating in the FumbleChain network.
+    All messages are serialized to JSON before being sent over the network.
+    All messages have a header and a body. The header contains a <em>command</em> (the message type), the blockchain
+    magic which identifies which blockchain this message is for, the sender peer ID and the size of the body.
+    The body is a JSON object and the header as well. To be precise, the body is an attribute of the header.
+    The message types used in FumbleChain are:
+
+<ul>
+    <li><a href="#msgversion">MsgVersion</a></li>
+    <li><a href="#msgverack">MsgVerack</a></li>
+    <li><a href="#msgping">MsgPing</a></li>
+    <li><a href="#msgpong">MsgPong</a></li>
+    <li><a href="#msgaddr">MsgAddr</a></li>
+    <li><a href="#msggetaddr">MsgGetaddr</a></li>
+    <li><a href="#msggetblocks">MsgGetblocks</a></li>
+    <li><a href="#msginv">MsgInv</a></li>
+    <li><a href="#msgblock">MsgBlock</a></li>
+    <li><a href="#msgtx">MsgTx</a></li>
+    <li><a href="#msgreject">MsgReject</a></li>
+</ul>
+
+<h5><a name="msgversion">MsgVersion</a></h5>
+
+<p>
+    The <em>MsgVersion</em> message is first sent when a connection is established with another node.
+    It contains the TCP port on which the node is listening for incoming connections from other nodes.
+    This is necessary so that peer exchange with the right port can happen. Otherwise, non-client nodes would not know
+    which port they should connect back to.
+</p>
+
+
+<h5><a name="msgverack">MsgVerack</a></h5>
+
+<p>
+    Nodes reply to <em>MsgVersion</em> messages with a <em>MsgVerack</em> message.
+</p>
+
+<h5><a name="msgping">MsgPing</a></h5>
+
+<p>
+    The <em>MsgPing</em> message is periodically sent to all connected peers to check whether they are still connected
+    to the network.
+</p>
+
+<h5><a name="msgpong">MsgPong</a></h5>
+
+<p>
+    An <em>MsgPong</em> message is a reply to an <em>MsgPing</em> message.
+    It acknowledges that a node is still connected to the network.
+</p>
+
+<h5><a name="msgaddr">MsgAddr</a></h5>
+
+<p>
+    An <em>MsgAddr</em> message contains a list of IP addresses and ports of peers on the FumbleChain network.
+</p>
+
+<h5><a name="msggetaddr">MsgGetaddr</a></h5>
+
+<p>
+    An <em>MsgGetaddr</em> message is a request for peer exchange.
+    The node receiving an <em>MsgGetaddr</em> must reply with an <em>MsgAddr</em> containing the list of all known
+    connected peers.
+</p>
+
+<h5><a name="msggetblocks">MsgGetblocks</a></h5>
+
+<p>
+    An <em>MsgGetblocks</em> message contains the hash of the latest known block.
+    Its purpose is to obtain a list of all missing blocks that occurred after the latest known block.
+    The node receiving an <em>MsgGetblocks</em> message must reply with an <em>MsgInv</em> message if the hash of the
+    latest known block exists in the receiving node's blockchain.
+    Otherwise, it must reply with an <em>MsgReject</em> message containing the received hash, to notify the sender that
+    this block is not in the current chain.
+</p>
+
+<h5><a name="msginv">MsgInv</a></h5>
+
+<p>
+    An <em>MsgInv</em> message is sent as a reply to an <em>MsgGetBlocks message</em>.
+    It either contains a list of blocks, following the block with the given hash specified in the <em>MsgGetblocks</em>
+    message.
+    Otherwise, if no block with such a hash can be found, then the message value is set to None.
+</p>
+
+<h5><a name="msgblock">MsgBlock</a></h5>
+
+<p>
+    An <em>MsgBlock</em> message contains a block.
+    When a peer broadcasts a block to the network, it sends an <em>MsgBlock</em> message.
+</p>
+
+<h5><a name="msgtx">MsgTx</a></h5>
+
+<p>
+    An <em>MsgTx</em> message contains a transaction.
+    When a peer broadcasts a transaction to the network, it sends an <em>MsgTx</em> message.
+</p>
+
+<h5><a name="msgreject">MsgReject</a></h5>
+
+<p>
+    An <em>MsgReject</em> message is a special message used to notify other peers that their previous message was
+    invalid.
+    This can happen if an invalid block is broadcast or if blocks starting from block A are requested but block A does
+    not exist in the local chain, for example.
+</p>
+
+
+</p>

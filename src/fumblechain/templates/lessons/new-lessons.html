@@ -1,0 +1,51 @@
+<p>
+    To add a new FumbleStore lesson, all changes need to be performed on the <code>fumblestore</code> git branch of the
+    <code>fumblechain</code> repository.
+</p>
+
+<p>
+    <code>
+<pre>$ cd fumblechain
+$ git checkout fumblestore
+$ cd src/fumblechain</pre>
+    </code>
+</p>
+
+<p>
+    First, create a new HTML file in the <em>templates/lessons</em> directory. This file's contents will be displayed
+    when the new lesson is selected. For example, assume we create a new file
+    <code>templates/lessons/my-new-lesson.html</code>
+</p>
+
+<p>
+    Next, add the reference to your new lesson HTML file in <code>store/lesson.py</code> in the <code>get_available_lessons()</code>
+    function. This function returns a dictionary of lesson category names to list of lessons. Each lesson is an object
+    of type <code>Lesson</code> which takes 3 arguments:
+
+<ul>
+    <li>The lesson ID, which must be a unique integer for all lessons.</li>
+    <li>The name of the lesson, a string.</li>
+    <li>The path to the lesson's HTML file, relative to the <code>templates</code> directory.</li>
+</ul>
+</p>
+
+<p>
+    Full example:
+
+    <code>
+<pre>def get_available_lessons():
+    lessons = {
+        "Category A": [
+            Lesson(1, "Introduction to FumbleChain", "lessons/fumblechain.html"),
+            Lesson(2, "Using the FumbleChain CLI", "lessons/fumblechain-cli.html"),
+            Lesson(3, "Using the Blockchain explorer", "lessons/blockchain-explorer.html")
+        ],
+        "Category B": [
+            Lesson(1000, "What is a blockchain?", "lessons/what-is-a-blockchain.html"),
+            Lesson(1001, "MY NEW LESSON", "lessons/my-new-lesson.html")
+        ]
+    }
+
+    return lessons</pre>
+    </code>
+</p>

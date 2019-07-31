@@ -1,0 +1,75 @@
+<p>
+    In this lesson we will talk about smart contracts and decentralized applications, also known as DApps.
+    For the sake of simplicity we will talk about smart contracts on the Ethereum blockchain, since this is the most
+    used platform for smart contracts.
+    Note that FumbleChain does not support smart contracts at the moment.
+</p>
+
+<h5>Smart contracts</h5>
+
+<p>
+    A smart contract is a service that runs on the Ethereum network.
+    Wallets have public addresses and so do smart contracts.
+    However, wallets and smart contracts are two different animals.
+    A smart contract contains executable code, which is usually first written in a smart contract programming language.
+    The most popular programming language for Ethereum smart contracts is called <a
+        href="https://solidity.readthedocs.io/">Solidity</a> (looks like Javascript) but there exist others such as
+    <a href="https://github.com/ethereum/vyper">Vyper</a>, which is similar to Python.
+    Both of these smart contract programming languages can be compiled to Ethereum Virtual Machine (EVM) bytecode so
+    that the code can be executed by nodes of the Ethereum network.
+    There is an online tool called <a href="https://remix.ethereum.org">Remix</a> that can be used for smart contract
+    development.
+</p>
+
+<p>
+    Smart contracts have private and public functions.
+    Public functions can be called by anyone.
+    A person can create a smart contract by making a transaction to a special address and embed the smart contract's EVM
+    bytecode within the transaction.
+    The creator of a smart contract can call a special initialization function that setups the context of the smart
+    contract only once at deploy time.
+    Similarly, a smart contract can be destroyed by calling a special function.
+    This can be used to store the public address of the smart contract creator's wallet.
+    A smart contract can call other smart contracts' functions so it is possible to build smart contract libraries
+    containing reusable functions.
+    To call a function on a smart contract, one simply makes a transaction.
+</p>
+
+<p>
+    Nodes participating in the Ethereum network execute the code of smart contracts and that costs them CPU resources.
+    To give them an incentive to actually execute that code, people who call smart contract functions must pay a fee.
+    In Ethereum, this fee is paid in a currency called <em>gas</em>.
+</p>
+
+<h5>DApps</h5>
+
+<p>
+    A decentralized app or DApp is an application that reads and writes data from and to a blockchain.
+    In the case of Ethereum, a DApp may be a web app that runs in a web browser.
+    It may use <a href="https://github.com/ethereum/web3.js/">web3.js</a> to call functions of one or more smart
+    contracts.
+    The smart contract functions are either called via a local Ethereum node, for example <a
+        href="https://github.com/ethereum/go-ethereum/wiki/geth">geth</a> or <a
+        href="https://www.trufflesuite.com/ganache">Ganache</a> for development purposes.
+    Additionally, one can use browser extensions such as <a href="https://metamask.io/">MetaMask</a> to dynamically
+    select which blockchain our DApps should connect to.
+</p>
+
+<p>
+    There are <a href="https://www.stateofthedapps.com/">many DApps</a>, such as <a
+        href="https://www.cryptokitties.co/">CryptoKitties</a>, a game that stores its data on the Ethereum blockchain
+    and many more.
+    There exist CTFs focusing on smart contracts, for example <a href="https://ethernaut.zeppelin.solutions/">this
+    one</a> or <a href="https://blockchain-ctf.securityinnovation.com/#/">that one</a>.
+
+</p>
+
+
+<h5>See also</h5>
+
+<p>
+<ul>
+    <li><a href="https://ethereum.stackexchange.com/questions/3/what-is-meant-by-the-term-gas">What is meant by the term
+        "gas"?</a></li>
+</ul>
+</p>

@@ -1,0 +1,41 @@
+<p>
+    Denial of service attacks make a blockchain stop working. A blockchain should always be working so this type of
+    attack is really nasty.
+</p>
+
+<p>
+    One way to perform a denial of service on a vulnerable blockchain is by abusing the target value in a blockchain
+    that uses the proof-of-work consensus algorithm.
+    This is possible when the target update code does not have sufficient checks.
+</p>
+
+<p>
+    Imagine that a given blockchain has a target value which defines the difficulty of mining blocks. Usually, in
+    proof-of-work blockchains, in order to successfully mine a block, one must produce a block with a random nonce so
+    that the block hash is less than the target value.
+    Therefore, the smaller the target value is, the more difficult it is to have a hash that is smaller than the target,
+    and therefore it is to mine a block.
+</p>
+
+<p>
+    Now, assume that the target automatically adjusts depending on the number of blocks that are mined. Usually the
+    target is adjusted by multiplying it by a correction factor which depends on the expected number of blocks mined
+    during any fixed-length time window and the actual number of blocks that have been mined during the latest time
+    window.
+    The target is updated so that if blocks were mined to fast, then the difficulty is increased and if not enough
+    blocks were mined, then the difficulty is lowered.
+</p>
+
+<p>
+    Suppose that someone can mine blocks so fast that the target approaches zero and that it becomes so small that a
+    buffer underflow happens. The target is now zero. Therefore, whatever happens, multiplying zero by any number will
+    always make zero.
+    The blockchain is stuck with a target equal to zero and nobody is able to mine blocks anymore, producing a denial of
+    service. The blockchain is now useless since no transaction can be performed anymore.
+</p>
+
+<p>
+    To protect against target underflow attacks, there are multiple possibilities. It should be hard enough to mine
+    blocks so that the target can never get anywhere close to zero. There should be a safeguard in the code so that
+    there is a minimum target value (or a maximum difficulty) so that this does not happen.
+</p>

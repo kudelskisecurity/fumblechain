@@ -1,0 +1,6 @@
+bc.json
+ctf*.bash
+ctf*.env
+wallets/
+gen/
+*.wallet

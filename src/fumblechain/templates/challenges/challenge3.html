@@ -1,0 +1,54 @@
+<p>
+    FumbleCorp learned from its past mistakes. This time they are 100% sure that their system is unbreakable.
+</p>
+
+<p>
+    The new version of FumbleChain was released and is being tested on mainnet3.
+</p>
+
+<p>
+    FumbleCorp is so proud of its new system that it has setup an Echo service to prove its point. Anyone can
+    send FumbleCoins to the Echo service's wallet address below and the Echo service will send
+    you back the same amount of coins after {{ CHALLENGE3_ECHOSERVICE_MIN_CONFIRMATIONS }} confirmation{{ CHALLENGE3_ECHOSERVICE_MIN_CONFIRMATIONS | pluralize}}.
+</p>
+
+
+<h4>Connecting to mainnet3</h4>
+
+<p>You can re-use the same client as the one used in <a href="/product/flag1">Challenge
+    1</a>. No need to re-download it if you already have it.</p>
+
+<p>To start the node and connect to mainnet3:</p>
+
+<p>
+    <kbd>./fc-docker.sh -n fc-mainnet3 -i fc -p 2225 -P 1340 -E 20604 -H {{ CHALLENGE3_MAINNET3_NODE_URL }} --magic={{
+        CHALLENGE3_MAINNET3_MAGIC}}</kbd>
+</p>
+
+To use the CLI client on mainnet3:
+
+<p>
+    <kbd>docker exec -it fc-mainnet3 ./cli.py --api-url http://localhost:1340</kbd>
+</p>
+
+
+<h4>Echo service</h4>
+
+<p>To use the Echo service, please send coins to the following address:</p>
+
+<form>
+    <textarea class="form-control" cols="50" rows="8" readonly>{{ CHALLENGE3_ECHOSERVICE_WALLET_ADDRESS }}</textarea>
+</form>
+
+<p>
+    Once more, your mission, if you accept it, is to buy the flag for challenge 3 here on the FumbleStore.
+</p>
+
+<p>
+    Quick links
+<ul>
+    <li><a href="http://localhost:20604">Mainnet3 explorer</a> (You have to be connected to the mainnet3 for the link to
+        work)
+    </li>
+</ul>
+</p>

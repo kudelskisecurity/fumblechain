@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if display_port_warning %}
+<div class="alert alert-warning">
+
+    <strong>Warning:</strong>
+    This instance of the FumbleStore is for demonstration purposes only.
+    To play the challenges on this FumbleStore instance, you may need to be connectable and have TCP ports 2222-2225 open.
+    Since FumbleChain leverages a peer-to-peer network, FumbleChain nodes must be able to connect to each other.
+    For a seamless CTF experience, please wait for the upcoming source code release and run the FumbleStore on your own machine.
+</div>
+{% endif %}
+
+<div class="product product-header">
+    <h4>FumbleChain: A Purposefully Vulnerable Blockchain</h4>
+
+    <p>We developed FumbleChain so that you, people who are interested in Blockchain security can learn about Blockchain
+        and hack a purposefully vulnerable Python3 blockchain named FumbleChain.</p>
+
+    <p>While the goal of FumbleChain is to be a tool for learning about Blockchain security in a simple and fun way,
+        please note that there may be some bugs that we didn't catch ourselves. Play the game and do not try to exploit
+        the framework itself. That would ruin all the fun.</p>
+
+    <p>Head over to the <a href="/challenges">Challenges</a> to test what you know or learned while reading the <a
+            href="/lessons">Lessons</a>.</p>
+
+    <p>If a challenge is too tough, you can reveal a hint. But only use it if you're stuck! Going through related
+        lessons once more may help as well.</p>
+
+    <p>Please read the <a href="/faq">FAQ</a> for more information. The answer to your questions may very well be there.
+    </p>
+
+    <p>Have fun!</p>
+</div>
+
+<div class="product">
+    <h4>Disclaimer</h4>
+
+    <p>
+        When running this software on your own machine, you may expose yourself to attacks.
+        We cannot guarantee that the software is bug-free. Upon starting the FumbleStore, various background services are started.
+        These services will listen for incoming connections on multiple TCP ports.
+        Proceed with caution and make sure your firewall rules are properly set.
+    </p>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Lessons - FumbleStore{% endblock %}}
+
+{% block content %}
+
+<div class="product margin-bottom">
+    <h4>Lessons</h4>
+
+    <p>These lessons can be read in any order. You do not have to read them all. Just pick whichever you are interested
+        in. Some of those explain useful concepts for solving some of the challenges.</p>
+
+    <ul>
+        {% for title in categories.keys() %}
+        <li><strong><a href="#category-{{ loop.index }}">{{ title }}</strong></a></li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+{% for title, lessons in categories.items() %}
+<div class="product margin-bottom">
+    <a name="category-{{ loop.index }}"></a><h4>{{ title }}</h4>
+    <ul>
+
+        {% for lesson in lessons %}
+        <li><a href="/lessons/{{lesson.id}}">{{lesson.title}}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endfor %}
+
+</div>
+{% endblock %}

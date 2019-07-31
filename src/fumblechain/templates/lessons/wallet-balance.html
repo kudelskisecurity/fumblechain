@@ -1,0 +1,86 @@
+<p>
+    In this lesson we will talk about ways to represent and compute the balance of a wallet.
+</p>
+
+<p>
+    There are multiple ways to model the balance of a wallet.
+    For example, Bitcoin computes the balance of a wallet as the sum of all UTXOs (Unspent Transaction Outputs)
+    associated to the given wallet.
+    However, Ethereum uses a different model. We will explain how these two models work.
+</p>
+
+<h5>Bitcoin - UTXO model</h5>
+
+<p>
+    One way to understand the UTXO model is by looking at an analogy with real world transactions.
+    Imagine that the currency you use is gold.
+    You own 100 gold: a 50 gold bill, two 20 gold bills and a 10 gold bill in your wallet.
+    Now assume you're buying an item worth 33 gold. Either you have exactly 33 gold or you pay more than 33 gold and get
+    some change.
+    Here you could pay, for example, with one 50 gold bill and you would receive one or more gold bills in return for a
+    total of 17 gold.
+    If you had, in addition to what you have, a 3 gold bill, then you could have payed the exact amount with one 20 gold
+    bill, one 10 gold bill and one 3 gold bill.
+    You would have received no change in return at all.
+</p>
+
+<p>
+    The balance on your Bitcoin wallet is computed by summing the unspent transaction outputs (the gold bills) that you
+    received.
+    Everytime you make a transaction, you use some of your UTXOs as input and get zero or more UTXOs as output. The
+    UTXOs used as input are then spent and cannot be used anymore.
+    An interesting fact is that the total set of UTXOs in Bitcoin <a
+        href="https://www.blockchain.com/en/charts/utxo-count">is growing</a> at the time of writing (July 2019).
+</p>
+
+<p>
+    We may ask ourselves what is the purpose of using such a system based on inputs and outputs.
+    The advantages of UTXOs are that they provide added privacy and that they support failsafe transaction parallelism.
+</p>
+<p>
+    Indeed, every time a new transaction is made, a new output is created and that output is linked to a new address,
+    which can optionally be used.
+    When a new address is used for each transaction, it makes it more difficult for anyone to obtain the whole history
+    of transactions linked to a given wallet.
+    Another advantage of using UTXOs is that it makes it possible to have fully parallel transactions. The account model
+    used by Ethereum, for example, suffers from a problem that arises when multiple transactions by the same wallet are
+    broadcast. In case the first transaction fails, subsequent transactions will also fail.
+    This is not the case with UTXOs because a new independent address is created after each transaction, making it
+    possible to fully parallelize transactions, even if the first one is failing.
+</p>
+
+
+<h5>Ethereum - Account model</h5>
+
+<p>
+    The Account model used, for example, by Ethereum, is much simpler.
+    Each node in the network keeps track of the balance of every wallet.
+    These balances are updated whenever a new block or new transaction is received.
+</p>
+
+<p>
+    The advantages of this model is that it feels more natural, is easier to implement and is more efficient.
+    Indeed, the model is similar to how bank accounts work. They hold a table with columns, one being the account number
+    and the other being the balance on that account.
+    The Account model is easier to implement because there is no logic related to unspent transaction outputs or change
+    to compute.
+    Finally, less data needs to be stored to be able to retrieve the balance for an account.
+</p>
+
+<p>
+    One thing to keep in mind is that transactions <a href="/lessons/2002">need to have a nonce to prevent double
+    spending</a> with this model.
+</p>
+
+<p>
+    The model used in FumbleChain is the Account model because it is simpler and better fits the goals of FumbleChain.
+</p>
+
+<h5>Conclusions</h5>
+
+<p>
+    Both wallet balance models are valid and there is no better model.
+    They all have advantages and drawbacks.
+    Choose your model depending on your requirements.
+    That concludes this lesson about wallet balance models.
+</p>

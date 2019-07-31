@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Sign up - FumbleStore{% endblock %}}
+
+{% if recaptcha_enabled %}
+{% block headjs %}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock %}
+{% endif %}
+
+{% block content %}
+
+<form method="POST" action="/register">
+    <div class="form-group row">
+        <label for="username" class="col-sm-2 col-form-label">Username</label>
+        <div class="col-sm-10">
+            <input autofocus type="text" class="form-control" id="username" name="username" placeholder="username"/>
+            <small id="usernameHelp" class="form-text text-muted">Please choose a username.<br/>Username must be
+                composed of letters (a-z, A-Z), numbers (0-9), dot (.), dash (-) or underscore (_) only.<br/>Username length must be
+                between 1 and 256.
+            </small>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="password" class="col-sm-2 col-form-label">Password</label>
+        <div class="col-sm-10">
+            <input type="password" class="form-control" id="password" name="password" placeholder="password"/>
+            <small id="passwordHelp" class="form-text text-muted">Please choose a strong password.<br/>Password length
+                must be between 1 and 256.
+            </small>
+        </div>
+    </div>
+
+    {% if recaptcha_enabled %}
+    <div class="form-group row">
+        <div CLASS="col-sm-2"></div>
+        <div class="col-sm-10 g-recaptcha" data-sitekey="6LeqWq0UAAAAAJ-erv78w1Xh0zsjp6wPulZch0-i"></div>
+    </div>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Challenges - FumbleStore{% endblock %}}
+
+{% block content %}
+
+<div class="products">
+    {% for product, owned in products %}
+
+    <div class="product">
+        <div>
+            <p>
+                {% if owned %}
+                <span class="badge badge-success">Completed</span>
+                {% endif %}
+
+                <strong>{{ product.title }}</strong>
+            </p>
+        </div>
+        <div>
+            <p>{{ product.description }}</p>
+            <p>
+                <small>Price: {{ product.price | price }} FumbleCoins</small>
+            </p>
+            <a href="/product/{{ product.short }}"
+               class="btn {% if owned %}btn-secondary{% else %}btn-primary{% endif %}">Read more</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

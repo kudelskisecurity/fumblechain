@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}FAQ - FumbleStore{% endblock %}}
+
+{% block content %}
+
+<div class="product">
+    <h4>Frequently Asked Questions</h4>
+
+    <ul>
+        {% for q, a in faq.items() %}
+        <li>
+            <a href="#answer-{{loop.index}}">{{q}}</a>
+        </li>
+
+        {% endfor %}
+    </ul>
+
+    <p></p>
+
+    {% for q, a in faq.items() %}
+    <a name="answer-{{loop.index}}"></a>
+    <p><strong>{{q}}</strong></p>
+    <p>{{a | safe}}</p>
+
+    {% endfor %}
+</div>
+{% endblock %}

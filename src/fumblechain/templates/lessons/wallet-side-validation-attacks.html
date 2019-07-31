@@ -1,0 +1,25 @@
+<p>
+    In this lesson, we will talk about wallet-side validation attacks. These attacks are similar to client-side
+    validation attacks in the context of regular apps such as a web app.
+</p>
+
+<p>
+    In a blockchain ecosystem there usually is a backend (also known as the node) which handles the blockchain itself
+    and has the data model,
+    allows for accessing blocks or transactions, as well as adding new blocks.
+    There is also a second part: the wallet software. The wallet software holds a private key and usually makes calls to
+    the blockchain backend when a transaction is made or a block is mined from within the wallet software.
+</p>
+
+<p>
+    One common mistake in blockchain implementation is to have block and transaction validity checks within the wallet
+    software only and not in the backend. These checks will prevent regular users from broadcasting manually crafted
+    transactions or blockchains. However, if no check is implemented on the backend, then an attacker could broadcast
+    blocks that would normally not pass wallet-side checks and network users will blindly accept these blocks or
+    transactions because the software only performs checks wallet-side.
+</p>
+
+<p>
+    A possible fix for this vulnerability is to implement security in depth: perform checks both in the wallet software
+    and in the backend.
+</p>

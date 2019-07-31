@@ -1,0 +1,8 @@
+docopt; python_version >= '3.0'
+coloredlogs; python_version >= '3.0'
+twisted; python_version >= '3.0'
+flask; python_version >= '3.0'
+APScheduler
+requests
+cryptography
+peewee

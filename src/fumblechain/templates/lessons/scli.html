@@ -1,0 +1,205 @@
+<p>
+    In this lesson we will learn how to use the FumbleChain non-interactive command-line interface tool
+    <code>scli.py</code>.
+</p>
+
+<p>
+    To use the tool, simply run <kbd>./scli.py</kbd>. The same requirements as for running <a href="/lessons/1"><code>cli.py</code></a>
+    apply. <code>scli.py</code> is similar to <code>cli.py</code> except that it is non-interactive. This makes it a
+    great candidate for scripting.
+</p>
+
+<p>Type <kbd>./scli.py --help</kbd> to get a list of available commands:</p>
+
+<code>
+    <pre>
+$ ./scli.py --help
+usage: scli.py [-h] [-H API_URL] -w WALLET
+               {transaction,t,tx,transaction_raw,traw,txraw,block_raw,braw,blkraw,mine,m,wallet,w,show,s}
+               ...
+
+FumbleChain non-interactive CLI client
+
+positional arguments:
+  {transaction,t,tx,transaction_raw,traw,txraw,block_raw,braw,blkraw,mine,m,wallet,w,show,s}
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -H API_URL, --api-url API_URL
+                        URL to connect to. Default is http://localhost:1337/.
+  -w WALLET, --wallet WALLET
+                        Path to wallet file to use.
+</pre>
+</code>
+
+<p>
+    We will now go through a regular scenario to introduce all the commands.
+</p>
+
+<p>
+    First, let's create a new wallet with <kbd>./scli.py -w foobar wallet generate &lt;output_path&gt;</kbd>.
+</p>
+
+<code>
+    <pre>$ ./scli.py -w foobar wallet generate my.wallet
+Using API: http://localhost:1337/
+Using wallet: foobar
+Generating new wallet...
+New wallet successfully saved at my.wallet
+    </pre>
+</code>
+
+<p>
+    This generated a new wallet and saved it to a file named <code>my.wallet</code> as specified on the command line.
+    For all further commands, use the <code>-w &lt;wallet_path&gt;</code> option to specify which wallet to operate on.
+</p>
+
+<p>
+    To display the wallet address and current balance, type <kbd>./scli.py -w my.wallet wallet show</kbd>:
+</p>
+
+<code>
+    <pre>$ ./scli.py -w my.wallet wallet show
+Using API: http://localhost:1337/
+Using wallet: my.wallet
+Showing wallet
+Address: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZE1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTEFEQ0Jod0tCZ1FDcGpmbHF2bmoyKzFjcUhOSmR4em11SFEvWgpDeFhmOVQ3MkkvckxxWkFJeTV1dUY5VDBpQkM2NHo1NW1vcGRnMzJYRHMvbUYxZ3RtRGhsN3JPUzdIU3dia2lrCkZLUGNUelo2RU4xeWZERFBQN2lXdzBhQ2ZWZ25pNlYzbU56eGFCem94clBRQlpKSWs5T3pqOEFmODRPVCtpcm0KQmcxU2lBRGw2cjJlbDZuTWN3SUJBdz09Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=
+Balance: None</pre>
+</code>
+
+<p>As you may see, the current balance is None. This is the default balance for all wallet addresses that never received
+    any FumbleCoins.</p>
+
+<p>
+    Let's make some money by mining a new block with <kbd>./scli.py -w my.wallet mine</kbd>:
+</p>
+
+<code>
+    <pre>$ ./scli.py -w my.wallet mine
+Using API: http://localhost:1337/
+Using wallet: my.wallet
+Mining block...
+Pushing block...
+Successfully mined block.</pre>
+</code>
+
+<p>
+    Now let's check our wallet balance once more:
+</p>
+
+<code>
+    <pre>$ ./scli.py -w my.wallet wallet show
+Using API: http://localhost:1337/
+Using wallet: my.wallet
+Showing wallet
+Address: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZE1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTEFEQ0Jod0tCZ1FDcGpmbHF2bmoyKzFjcUhOSmR4em11SFEvWgpDeFhmOVQ3MkkvckxxWkFJeTV1dUY5VDBpQkM2NHo1NW1vcGRnMzJYRHMvbUYxZ3RtRGhsN3JPUzdIU3dia2lrCkZLUGNUelo2RU4xeWZERFBQN2lXdzBhQ2ZWZ25pNlYzbU56eGFCem94clBRQlpKSWs5T3pqOEFmODRPVCtpcm0KQmcxU2lBRGw2cjJlbDZuTWN3SUJBdz09Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=
+Balance: 1</pre>
+</code>
+
+<p>
+    We just received 1 FumbleCoin as a reward for successfully mining a block. This block can be inspected with the
+    <kbd>./scli.py -w my.wallet show block &lt;block_id&gt;</kbd> command. Let's see what is in the very first block
+    with <kbd>./scli.py -w my.wallet show block 0</kbd>:
+</p>
+
+<code>
+    <pre>$ ./scli.py -w my.wallet show block 0
+Using API: http://localhost:1337/
+Using wallet: my.wallet
+
+============================================
+Block       #0
+Hash:       115410170253468192037178135221315502767
+Previous:   0
+Target:     1329227995784915872903807060280344575
+Merkle tree:d41d8cd98f00b204e9800998ecf8427e
+Timestamp:  Wed Dec 12 16:05:00 2018
+
+Transactions:
+============================================</pre>
+</code>
+
+<p>
+    The very first block of the Blockchain is also called the genesis block. Now let's inspect the latest block (the one
+    we just mined) with <kbd>./scli.py -w my.wallet show block -1</kbd>. Here <code>-1</code> refers to the latest
+    block:
+</p>
+
+<code>
+    <pre>$ ./scli.py -w my.wallet show block -1
+Using API: http://localhost:1337/
+Using wallet: my.wallet
+
+============================================
+Block       #6
+Hash:       257968643509666026700772625280756228
+Previous:   674276410189872332528313631797230524
+Target:     1329227995784915872903807060280344575
+Merkle tree:3a3069967d2745c01813b0bb7f97e6f9
+Timestamp:  Tue Apr  9 12:15:44 2019
+
+Transactions:
+--------------------------------------------
+Transaction:23c1d3f8-a243-4d4d-b873-3bfeefc5e0b0
+Hash:       b0e4190e5834a8bb7ae76f6449140997
+Source:     0
+Destination:LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZE1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTEFEQ0Jod0tCZ1FDcGpmbHF2bmoyKzFjcUhOSmR4em11SFEvWgpDeFhmOVQ3MkkvckxxWkFJeTV1dUY5VDBpQkM2NHo1NW1vcGRnMzJYRHMvbUYxZ3RtRGhsN3JPUzdIU3dia2lrCkZLUGNUelo2RU4xeWZERFBQN2lXdzBhQ2ZWZ25pNlYzbU56eGFCem94clBRQlpKSWs5T3pqOEFmODRPVCtpcm0KQmcxU2lBRGw2cjJlbDZuTWN3SUJBdz09Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=
+Amount:     1
+Signature:  None
+--------------------------------------------
+============================================</pre>
+</code>
+
+<p>
+    Now, let's send some FumbleCoins to a friend with the <kbd>./scli.py -w my.wallet transaction &lt;destination&gt;
+    &lt;quantity&gt;</kbd> command:
+</p>
+
+<code>
+    <pre>$ ./scli.py -w my.wallet transaction my_friends_address 0.7
+Using API: http://localhost:1337/
+Using wallet: my.wallet
+Transaction successfully broadcasted.</pre>
+</code>
+
+
+<p>
+    Show a block's JSON with <kbd>./scli.py -w my.wallet show block_json &lt;block_id&gt;</kbd>. Similary, show a
+    transaction's JSON with <kbd>./scli.py -w my.wallet show transaction_json
+    &lt;transaction_id&gt;</kbd>.
+</p>
+
+<p>
+    There are also advanced commands for broadcasting blocks or transactions from JSON directly. Use
+    <kbd>./scli.py -w my.wallet block_raw</kbd> and <kbd>./scli.py -w my.wallet transaction_raw</kbd> respectively.
+    These commands read JSON input from stdin.
+</p>
+
+<p>
+    Therefore, to broadcast a transaction directly from the JSON serialized format, you could do something similar to:
+</p>
+
+<code>
+    <pre>$ echo '{"dst": "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZE1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTEFEQ0Jod0tCZ1FDcGpmbHF2bmoyKzFjcUhOSmR4em11SFEvWgpDeFhmOVQ3MkkvckxxWkFJeTV1dUY5VDBpQkM2NHo1NW1vcGRnMzJYRHMvbUYxZ3RtRGhsN3JPUzdIU3dia2lrCkZLUGNUelo2RU4xeWZERFBQN2lXdzBhQ2ZWZ25pNlYzbU56eGFCem94clBRQlpKSWs5T3pqOEFmODRPVCtpcm0KQmcxU2lBRGw2cjJlbDZuTWN3SUJBdz09Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=", "index": "23c1d3f8-a243-4d4d-b873-3bfeefc5e0b0", "magic": 2882400018, "qty": 1, "signature": null, "src": "0"}' | ./scli.py -w my.wallet transaction_raw
+Using API: http://localhost:1337/
+Using wallet: my.wallet
+KO</pre>
+</code>
+
+<p>
+    Here the output is <code>KO</code> because that transaction already exists and cannot be duplicated. However this
+    would work if the transaction's JSON was the one from a never-before-seen transaction.
+</p>
+
+<p>
+    If the input cannot be parsed, the output will be: <code>Invalid transaction JSON</code>. If the transaction JSON is
+    valid and genuine, the output is <code>OK</code>.
+</p>
+
+<p>To connect to a different FumbleChain daemon, use the <code>--api-url &lt;API_URL&gt;</code> option. For example:
+    <kbd>./scli.py -w my.wallet --api-url http://localhost:1338 show block -1</kbd></p>
+
+
+<p>
+    That sums up this lesson about using the FumbleChain non-interactive CLI tool.
+</p>

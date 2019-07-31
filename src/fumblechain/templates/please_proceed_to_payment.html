@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Payment - FumbleStore{% endblock %}}
+
+{% block content %}
+
+<div class="product">
+
+    <h2>Please proceed with payment</h2>
+
+    <p>
+        In order to obtain the product <code>{{ product.title }}</code>, please send <code>{{ product.price }}</code>
+        FumbleCoins to the address:
+
+
+    <form>
+        <textarea class="form-control" cols="50" rows="8" readonly>{{ wallet_address }}</textarea>
+    </form>
+
+
+    </p>
+
+    <p>
+        Our policy is to wait for 6 confirmations before any payment can be trusted on our end. Please allow our system
+        some
+        time to process your payment and refresh the product page after a few seconds.
+    </p>
+
+</div>
+
+{% endblock %}

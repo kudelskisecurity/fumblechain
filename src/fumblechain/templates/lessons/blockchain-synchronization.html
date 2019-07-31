@@ -1,0 +1,100 @@
+<p>
+    In this lesson we will talk about blockchain state synchronization.
+</p>
+
+<p>
+    A decentralized blockchain network is operated by multiple nodes, or peers, each storing a copy of the blockchain.
+    The blockchain's structure changes everytime a new block or transaction is broadcasted.
+    Since every node is expected to have an updated copy of the blockchain, a mechanism for synchronization of the state
+    among all the nodes is required.
+    For the sake of simplicity we will assume that a Proof of Work blockchain is being used for this lesson.
+</p>
+
+<p>
+    To understand how each node keeps its local copy of the blockchain up to date, one can think of all the possible
+    events that can happen.
+    Namely:
+<ul>
+    <li>Someone creates a new transaction</li>
+    <li>Someone successfully mines a new block</li>
+    <li>Someone connects to the blockchain network</li>
+    <li>Invalid blocks or transactions are broadcasted</li>
+</ul>
+</p>
+
+<h5>Someone creates a new transaction</h5>
+
+<p>
+    The node that creates a transaction must sign the transaction and broadcast it to the network.
+    Nodes who receive a new transaction must verify the transaction signature and, if successful, move the received
+    transaction to the transaction pool, which is a temporary area for pending transactions.
+    These transactions are not yet considered valid because they are not part of a block.
+    When a new block is created, any transaction in that block that were also in the transaction pool, must be removed
+    from the transaction pool because they were successfully added to a block.
+</p>
+
+
+<h5>Someone successfully mines a new block</h5>
+
+<p>
+    The node that mined the block must broadcast it to the network.
+    Nodes who receive a new block must verify that the block is valid.
+    The node will actually replay the block over its local blockchain and make all the usual checks that are performed
+    with transactions.
+    That is, that all transactions in the block are valid and that the received block's previous block hash matches the
+    current latest block's hash.
+    Additionally, nodes receiving a new block can broadcast it to the network as well, to help propagating blocks.
+    If a node receives a duplicate block, it will discard it and not propagate it.
+</p>
+
+<p>
+    Not all nodes are miners, but the ones that do should take special measures when a new block is received.
+    Indeed, miners are competing to mine the next block.
+    However, if a new valid block arrives, then they should update
+    their local copy of the blockchain and create a new block to start mining on, which has a previous block hash
+    matching the received block's hash.
+    That is, they should start mining against the new block they received.
+    Otherwise, they would be mining a new block for an old version of the blockchain and by the time they successfully
+    mine that block, many other blocks would have been added to the chain, making their mining efforts useless because
+    the other chain would be longer.
+</p>
+
+
+<h5>Someone connects to the blockchain network</h5>
+
+<p>
+    Whenever a new node joins the network, it must download missing blocks from other peers so that its local copy is up
+    to date.
+    Nodes on the network must be ready to send blocks to other peers so that everyone can exchange missing blocks and
+    keep all nodes updated on the state of the distributed blockchain.
+    Additionally, nodes must exchange other peers' IP addresses so that everyone knows whom to send new transactions or
+    blocks to.
+    This is also known as peer exchange.
+</p>
+
+
+<h5>Invalid blocks or transactions are broadcasted</h5>
+
+<p>
+    When an invalid block or transaction is received, special attention must be given.
+    The node receiving an invalid block must discard the block and notify the sender that the block was rejected.
+    This is useful because there are two cases where someone could send an invalid block:
+<ul>
+    <li>The sender is malicious</li>
+    <li>The sender is honest but holds an outdated local copy of the blockchain</li>
+</ul>
+
+It is important to notify honest senders that their local copy is outdated and that they should catch up.
+Note that nodes may also detect that their local copy is outdated when they received new blocks.
+It is however hard to be sure whether a malicious node is sending blocks from the future or if our local copy is outdated.
+</p>
+
+<p>
+    It is possible to implement peer banning so that peers acting maliciously get banned and cannot spam honest nodes
+    with invalid transactions or blocks.
+    This is implemented in Bitcoin, for example.
+</p>
+
+<p>
+    That concludes this lesson about blockchain state synchronization.
+</p>

@@ -1,0 +1,62 @@
+<p>
+    FumbleChain is a permissionless <a href="/lessons/999">blockchain</a> written in Python 3.
+    It leverages the <a href="/lessons/1000#pow">proof of work</a> consensus mechanism.
+    It is designed to be similar to Bitcoin but with less features and a much smaller codebase.
+    Also, it uses some weak cryptographic primitives on purpose, for education purposes, so that it's easier to break.
+</p>
+
+<p>
+    It uses a proof-of-work consensus algorithm. Blocks must be mined by clients.
+</p>
+
+<p>
+    FumbleChain offers a digital currency named FumbleCoins. Every time a block is mined, a reward of 1 FumbleCoin is
+    awarded to the miner. The maximum number of transactions in a block is 256, including the coinbase (the mining
+    reward transaction).
+    FumbleChain does not have transaction fees.
+</p>
+
+<p>
+    Mining difficulty is adjusted using a target value.
+    For a block to be successfully mined, the hash of the block header must be smaller than the current blockchain
+    target value.
+    The target changes every 10 blocks and is re-computed so that the difficulty to mine blocks is adapted for a block
+    to be mined every 6 seconds. For example, if the last 10 blocks were mined too quickly, the target will be adjusted
+    so that it becomes harder to mine the next 10 blocks.
+</p>
+
+<p>
+    When a transaction is sent or received, it first goes to the Transaction pool (txpool), waiting to be included in a
+    mined block.
+</p>
+
+<p>
+    Public keys are RSA based and are 1024 bit long. To obtain wallet addresses, we take the public key in PEM format
+    and then convert it to base64.
+</p>
+
+<p>
+    Nodes on the FumbleChain network connect over TCP and exchange messages serialized in JSON format. There are various
+    message types, such as <em>Transaction</em>, <em>Block</em>, <em>Reject</em>, <em>GetBlocks</em>, etc. Feel free to
+    dig into the code to get a better understanding of how it works. The codebase is small enough so that it can easily
+    be understood.
+</p>
+
+<h4>The FumbleChain ecosystem</h4>
+
+<p>
+    FumbleChain includes:
+
+<ul>
+    <li>a blockchain, including a <a href="http://0.0.0.0:20801/lessons/1">command-line client</a> and a web-based
+        client
+    </li>
+    <li>a CTF (capture-the-flag) in the shape of a fake e-commerce website: the FumbleStore (this is where you are) with
+        multiple challenges
+    </li>
+    <li>lessons/tutorials about blockchain and vulnerabilities such as the one you are reading now</li>
+    <li>a web-based <a href="/lessons/2">blockchain explorer</a> named the FumbleChain explorer, which is embedded with
+        the FumbleChain client
+    </li>
+</ul>
+</p>

@@ -1,0 +1,32 @@
+<p>
+    In this lesson, we will talk about public key and wallet address mismatch attacks.
+</p>
+
+<p>
+    Wallet addresses are usually derived from public keys.
+    Some blockchains, such as FumbleChain, virtually map wallet addresses and public keys one-to-one directly.
+    That is, the public key IS the wallet's address. To be exact, in FumbleChain, the wallet address is the
+    base64-encoded public key. In some blockchains, the address is the hash of the public key.
+</p>
+
+<h4>Case study: Lisk</h4>
+
+<p>
+    Some blockchains such as Lisk, however, produce wallet addresses in a slightly different way.
+    The address and the public key are both generated using a passphrase as a starting point.
+    A 256-bit public key is generated using the passphrase as a seed.
+    A 64-bit wallet address is obtained by hashing the public key and truncating the resulting value to 64 bits.
+    In other words, the wallet address is much shorter than the public key itself.
+</p>
+
+<p>
+    The consequence of this is that it is much easier to brute-force the private key and address generation since the
+    address is the public key truncated (less entropy than the public key itself).
+    In other words, there exist multiple public keys for a same wallet.
+    The security of wallets is therefore weakened because there are more chances of finding the private key with a
+    brute-force attack.
+</p>
+
+<p>
+    To protect from such an attack, the system should not use truncated wallet addresses.
+</p>
