@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="product margin-bottom">
+    <h2>Transaction pool</h2>
+
+    <p>
+        Transactions initially go to a special memory area called the Transaction oool. These transactions are
+        candidates for being added to a new block and are therefore not yet part of the blockchain. Whenever a new block
+        is created, transactions that are in the new block are removed from the transaction pool.
+    </p>
+</div>
+
+
+<div class="product">
+    <h4>Transactions ({{ tx_count }})</h4>
+
+    <table class="table table-striped table-sm">
+
+        <thead class="thead-dark">
+        <tr>
+            <th>Index</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Quantity</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for tx in txs %}
+        <tr>
+            <td>{{ tx.index }}</td>
+            <td><a href="/wallet/{{ tx.src }}">{{ tx.src | address }}</a></td>
+            <td><a href="/wallet/{{ tx.dst }}">{{ tx.dst | address }}</a></td>
+            <td>{{ tx.qty }}</td>
+        </tr>
+
+        {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,320 @@
+body {
+    margin: 0px;
+    font-family: 'Roboto', sans-serif;
+    background-color: #F7F7F8;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a.card:hover {
+    text-decoration: none;
+}
+
+/* EXPLORER */
+
+.explorer-home {
+    width: 100%;
+    display: grid;
+    grid-gap: 15px;
+    grid-template-areas:
+            "tx tx"
+            "blk blk"
+            "chain daemon";
+}
+
+.latest-transactions {
+    grid-area: tx;
+}
+
+.latest-blocks {
+    grid-area: blk;
+}
+
+.chain-details {
+    grid-area: chain;
+}
+
+.daemon-details {
+    grid-area: daemon;
+}
+
+.wallet-main {
+    max-width: 100%;
+}
+
+/* END EXPLORER */
+
+pre {
+    margin-left: 15px;
+    padding: 15px;
+    border: 1px solid #e0e4e7;
+}
+
+.home-link {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.home-link:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.header-link {
+    color: #c0c0c0;
+}
+
+.header-link:hover {
+    color: #ffffff;
+}
+
+.header-section-link {
+    text-decoration: none;
+    position: relative;
+    font-size: 1rem;
+}
+
+.header-section-link:hover {
+    text-decoration: none;
+}
+
+.header-section-link:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    left: 0;
+    bottom: -4px;
+    border-bottom: 4px solid white;
+    transition: all 0.3s ease;
+}
+
+.header-section-link:hover:after {
+    width: 100%;
+}
+
+
+.active-header-link {
+    border-bottom: 4px solid white;
+}
+
+.title {
+    font-size: 2em;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.main-container {
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-block {
+    min-height: 100vh;
+    align-items: normal;
+    margin: 15px;
+}
+
+.wrapper {
+    width: 1200px;
+    text-align: center;
+}
+
+.header {
+    background-color: #003A63;
+    width: 100%;
+}
+
+.header-wrapper {
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    padding-right: 12px;
+    height: 63px;
+}
+
+.header-main {
+}
+
+
+.header-links {
+    margin-left: 20px;
+}
+
+.header-item {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.login {
+    text-align: right;
+    color: #ffffff;
+    margin-left: auto;
+}
+
+.content {
+    text-align: left;
+}
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 30px;
+}
+
+.product {
+    border: 1px solid #e0e4e7;
+    border-radius: 2px;
+    padding: 15px;
+    background-color: white;
+}
+
+.product-container {
+    width: 100%;
+}
+
+.product-header {
+    margin-bottom: 15px;
+}
+
+.product-grid {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: 70% 30%;
+}
+
+.product-main {
+}
+
+.product-side {
+
+}
+
+.product-side-item {
+    margin-bottom: 15px;
+}
+
+.product-side-item-margin {
+    margin-right: 15px;
+}
+
+.product-details {
+}
+
+.product-hint {
+
+}
+
+.product-purchase {
+
+}
+
+.scoreboard-main {
+    width: 100%;
+}
+
+.scoreboard-item {
+    margin-bottom: 15px;
+}
+
+.margin-bottom {
+    margin-bottom: 15px;
+}
+
+.footer {
+    width: 100%;
+    background-color: #00324F;
+    color: #808080;
+    diplay: grid;
+    justify-items: center;
+    align-items: center;
+    text-align: left;
+    margin-top: 30px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.footer-wrapper {
+    width: 1200px;
+    text-align: center;
+}
+
+.flashes .alert-inner {
+    display: block;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.flashes .close {
+    float: right;
+    margin: 3px 12px 0px 0px;
+    cursor: pointer;
+}
+
+.flashes input {
+    display: none;
+}
+
+.flashes input:checked ~ * {
+    animation-name: dismiss, hide;
+    animation-duration: 300ms;
+    animation-iteration-count: 1;
+    animation-timing-function: ease;
+    animation-fill-mode: forwards;
+    animation-delay: 0s, 100ms;
+}
+
+.success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+.info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+
+@keyframes dismiss {
+    0% {
+        opacity: 1;
+    }
+    90%, 100% {
+        opacity: 0;
+        font-size: 0.1px;
+        transform: scale(0);
+    }
+}
+
+@keyframes hide {
+    100% {
+        height: 0px;
+        width: 0px;
+        overflow: hidden;
+        margin: 0px;
+        padding: 0px;
+        border: 0px;
+    }
+}

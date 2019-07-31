@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="product margin-bottom">
+
+
+    <h2>Block {{ b.index }}</h2>
+
+    <ul>
+        <li>Hash: {{ b.hash }}</li>
+        <li>Previous block hash: {% if b.prevhash %}<a href="/block/{{ b.index - 1 }}">{{ b.prevhash }}{% else %}None{%
+            endif
+            %}</a></li>
+        <li>Creation date: {{ b.timestamp | datetime }}</li>
+        <li>Proof: {{ b.proof }}</li>
+        <li>Target: {{ b.target }}</li>
+        <li>Miner: {% if b.miner %}<a href="/wallet/{{ b.miner }}">{{ b.miner | address}}{% else %}None{% endif
+            %}</a></li>
+    </ul>
+</div>
+
+<div class="product">
+    <h4>Transactions ({{ b.tx_count }})</h4>
+
+    <table class="table table-striped table-sm">
+
+        <thead class="thead-dark">
+        <tr>
+            <th>Index</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Quantity</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for tx in b.txs %}
+        <tr>
+            <td><a href="/tx/{{ tx.index }}">{{ tx.index }}</a></td>
+            <td><a href="/wallet/{{ tx.src }}">{{ tx.src | address }}</a></td>
+            <td><a href="/wallet/{{ tx.dst }}">{{ tx.dst | address }}</a></td>
+            <td>{{ tx.qty }}</td>
+        </tr>
+
+        {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}
