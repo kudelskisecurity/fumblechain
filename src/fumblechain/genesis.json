@@ -1,0 +1,18 @@
+{
+  "chain": [
+    {
+      "index": 0,
+      "prevhash": 0,
+      "proof": "72388",
+      "timestamp": 1544630700.5019743,
+      "trans_tree": {
+        "depth": 0,
+        "root": {
+          "_child_1": null,
+          "_child_2": null,
+          "_data": null
+        }
+      }
+    }
+  ]
+}

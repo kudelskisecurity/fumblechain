@@ -1,0 +1,4 @@
+*.wallet
+gen/
+wallets/
+bc.json
