@@ -63,5 +63,5 @@ while [ "$1" != "" ]; do
 done
 
 docker build -t fc .
-docker run -it --rm -p ${port}:${port} -p ${explorer_port}:${explorer_port} --network fumblechain_default --name ${name} ${image} /bin/sh -c \
+docker run -it --rm -p ${port}:${port} -p ${BIND_ADDR:=127.0.0.1}:${explorer_port}:${explorer_port} --network fumblechain_default --name ${name} ${image} /bin/sh -c \
   "./daemon.sh -vvv --explorer --explorer-port ${explorer_port} --port ${port} --api-port ${api_port} --peer ${host} ${extra_args[@]} start"
