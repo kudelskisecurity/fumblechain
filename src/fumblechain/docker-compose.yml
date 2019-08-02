@@ -5,7 +5,7 @@ services:
       context: ../..
       dockerfile: src/fumblechain/docker/fumblestore/Dockerfile
     ports:
-      - "${FUMBLESTORE_PORT}:${FUMBLESTORE_PORT}"
+      - "${HOST_BIND_ADDRESS}:${FUMBLESTORE_PORT}:${FUMBLESTORE_PORT}"
     environment:
       - CHALLENGE1_PRODUCT_NODE_API_URL=http://mainnet-node:1337
       - CHALLENGE2_PRODUCT_NODE_API_URL=http://mainnet2-node:1337
@@ -46,7 +46,7 @@ services:
       context: ../..
       dockerfile: src/fumblechain/docker/challenge1/moneymaker/Dockerfile
     ports:
-      - "${CH1_MONEYMAKER_PORT}:${CH1_MONEYMAKER_PORT}"
+      - "${HOST_BIND_ADDRESS}:${CH1_MONEYMAKER_PORT}:${CH1_MONEYMAKER_PORT}"
     environment:
       - CHALLENGE1_MONEYMAKER_URL=http://${FC_HOST}:${CH1_MONEYMAKER_PORT}
       - CHALLENGE1_MAINNET_NODE_URL=${FC_HOST}:${CH1_MAINNET_NODE_PORT}
@@ -61,7 +61,7 @@ services:
       context: ../..
       dockerfile: src/fumblechain/docker/challenge1/mainnet-node/Dockerfile
     ports:
-      - "${CH1_MAINNET_NODE_PORT}:${CH1_MAINNET_NODE_PORT}"
+      - "${HOST_BIND_ADDRESS}:${CH1_MAINNET_NODE_PORT}:${CH1_MAINNET_NODE_PORT}"
     env_file:
       - gen/ctf_wallet_addresses_ch1.env
     environment:
@@ -74,7 +74,7 @@ services:
       context: ../..
       dockerfile: src/fumblechain/docker/challenge1/testnet-node/Dockerfile
     ports:
-      - "${CH1_TESTNET_NODE_PORT}:${CH1_TESTNET_NODE_PORT}"
+      - "${HOST_BIND_ADDRESS}:${CH1_TESTNET_NODE_PORT}:${CH1_TESTNET_NODE_PORT}"
     env_file:
       - gen/ctf_wallet_addresses_ch1.env
     environment:
@@ -90,7 +90,7 @@ services:
       context: ../..
       dockerfile: src/fumblechain/docker/challenge2/mainnet2-node/Dockerfile
     ports:
-      - "${CH2_MAINNET_NODE_PORT}:${CH2_MAINNET_NODE_PORT}"
+      - "${HOST_BIND_ADDRESS}:${CH2_MAINNET_NODE_PORT}:${CH2_MAINNET_NODE_PORT}"
     environment:
       - CHALLENGE2_MAINNET2_NODE_URL=${FC_HOST}:${CH2_MAINNET_NODE_PORT}
       - CHALLENGE2_MAINNET2_MAGIC=${CH2_MAINNET_MAGIC}
@@ -110,7 +110,7 @@ services:
       context: ../..
       dockerfile: src/fumblechain/docker/challenge3/mainnet3-node/Dockerfile
     ports:
-      - "${CH3_MAINNET_NODE_PORT}:${CH3_MAINNET_NODE_PORT}"
+      - "${HOST_BIND_ADDRESS}:${CH3_MAINNET_NODE_PORT}:${CH3_MAINNET_NODE_PORT}"
     environment:
       - CH3_MAINNET_NODE_PORT
       - CH3_MAINNET_MAGIC
