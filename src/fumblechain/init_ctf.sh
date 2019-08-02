@@ -37,7 +37,6 @@ function post_up() {
 # Main entry point
 ####################################################
 
-echo
 disclaimer
 echo
 startup
@@ -50,6 +49,7 @@ docker run -v $(pwd -P)/gen:/opt/fumblechain/gen fcgen:latest ./gen.sh
 # then start the services
 docker-compose up --build -d
 
+echo
 disclaimer
 echo
 post_up
