@@ -9,9 +9,8 @@ import os
 import queue
 
 import coloredlogs
-from docopt import docopt
-
 from api.api import app as api_app
+from docopt import docopt
 from explorer.explorer import app as explorer_app
 from model.blockchain import BlockChain
 from net.address import Address
