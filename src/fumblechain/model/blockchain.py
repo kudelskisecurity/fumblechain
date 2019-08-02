@@ -9,6 +9,7 @@ import math
 import os
 
 from utils.serde import Encoder
+
 from .block import Block
 from .transaction import Transaction
 from .transactionpool import TransactionPool
@@ -407,6 +408,7 @@ class BlockChain:
         if not tx.magic == self.magic:
             logger.debug("Invalid magic. Denying transaction.")
             return False
+
         return True
 
     def pop_block(self):
