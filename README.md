@@ -120,6 +120,14 @@ Ideas for new challenges or lessons are welcome!
 
 The FumbleStore contains lessons about creating new challenges and new lessons.
 
+# Disclaimer
+
+When running this software on your own machine, you may expose yourself to attacks.
+We cannot guarantee that the software is bug-free.
+Upon starting the FumbleStore, various background services are started.
+These services will listen for incoming connections on multiple TCP ports.
+Proceed with caution and make sure your firewall rules are properly set.
+
 # License and Copyright
 
 Copyright(c) 2019 Nagravision SA.

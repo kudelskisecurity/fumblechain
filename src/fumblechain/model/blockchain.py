@@ -9,6 +9,7 @@ import math
 import os
 
 from utils.serde import Encoder
+
 from .block import Block
 from .transaction import Transaction
 from .transactionpool import TransactionPool
