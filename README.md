@@ -75,7 +75,7 @@ Follow the same instructions as above.
 
 Except, configure the `.env` file in the `fumblestore` branch so that the variable `FC_HOST` contains the public domain name/ip address of the environment where you deploy the CTF (for example "mydomain.com").
 
-Also make sure to set `IS_DOCKER_LOCAL` to `0` when deploying the CTF publicly so that it works for clients who connect from another machine.
+Also make sure to set `IS_DOCKER_LOCAL` to `0` and `HOST_BIND_ADDRESS` to `0.0.0.0` or your machine's IP address when deploying the CTF publicly so that it works for clients who connect from another machine.
 Configure the application as desired by editing the `.env` file (e.g. enable CAPTCHA for registration).
 
 When done, run `./init_ctf.sh` just as above.
