@@ -495,6 +495,32 @@ class BlockChainTest(unittest.TestCase):
         # tx appears after 6 confirmations only
         self.assertEqual(bc.get_secure_wallet_balance("toto"), 1)
 
+    def test_same_chain_replay_fix(self):
+        bc = BlockChain()
+
+        w, cbtx = WalletHelper.generate_wallet_and_coinbase()
+
+        b = bc.new_block(cbtx)
+        mine(b)
+        self.assertTrue(bc.discard_block(b))
+
+        b2 = bc.new_block(cbtx)  # reuse cbtx on purpose
+        mine(b2)
+        self.assertFalse(bc.discard_block(b2))
+
+    def test_other_chain_replay_fix(self):
+        bc = BlockChain()
+        bc.magic = 0xaaaaaaaa
+
+        w = Wallet()
+        w.create_keys()
+        cbtx = Transaction("0", w.get_address(), 1, magic=0xffffffff)  # coinbase
+        w.sign_transaction(cbtx)
+
+        b = bc.new_block(cbtx)
+        mine(b)
+        self.assertFalse(bc.discard_block(b))
+
 
 class WalletTest(unittest.TestCase):
     def test_sign_and_verify(self):

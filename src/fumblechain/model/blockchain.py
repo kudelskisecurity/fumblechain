@@ -9,6 +9,7 @@ import math
 import os
 
 from utils.serde import Encoder
+
 from .block import Block
 from .transaction import Transaction
 from .transactionpool import TransactionPool
@@ -157,6 +158,7 @@ class BlockChain:
 
         try:
             assert self.get_wallet_balance(trans.src) >= trans.qty
+            assert trans.magic == self.magic
             assert self.transaction_pool.add_transaction(trans) == True
             logger.debug("tx added to tx pool")
             return True
@@ -275,6 +277,12 @@ class BlockChain:
                 return False
             self.pop_block()
 
+        # check that no transaction is replayed
+        is_tx_replay_free = self.is_block_txs_replay_free(new_block)
+        if not is_tx_replay_free:
+            logger.debug("Block has transactions that have been replayed")
+            return False
+
         is_txs_positive = self.is_block_txs_positive(new_block)
         if not is_txs_positive:
             logger.debug("Block has NaN transaction quantities")
@@ -364,6 +372,20 @@ class BlockChain:
 
         return True
 
+    def is_block_txs_replay_free(self, new_block):
+        # build a set with all tx.index in the new block
+        new_block_tx_indexes = set()
+        for tx in new_block.get_transactions():
+            new_block_tx_indexes.add(tx.index)
+
+        # iterate over all txs in the current blockchain and return False is there is any duplicate
+        for b in self.chain:
+            for tx in b.get_transactions():
+                if tx.index in new_block_tx_indexes:
+                    return False
+
+        return True
+
     def is_valid_block(self, block):
         """Returns true if the given block is considered valid.
         Returns False otherwise.
@@ -395,6 +417,17 @@ class BlockChain:
             if i > 0 and not Wallet.verify_transaction(tx):
                 logger.debug(f"Invalid signature for transaction in block. tx.index={tx.index}")
                 return False
+
+        for tx in block.get_transactions():
+            if not self.is_valid_transaction(tx):
+                return False
+
+        return True
+
+    def is_valid_transaction(self, tx):
+        if not tx.magic == self.magic:
+            logger.debug("Invalid magic. Denying transaction.")
+            return False
 
         return True
 
