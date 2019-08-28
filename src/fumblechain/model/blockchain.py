@@ -152,7 +152,7 @@ class BlockChain:
         This actually puts the transaction to the transaction pool until it is added to a mined block."""
 
         # only allow positive quantity transactions
-        if math.isnan(trans.qty) or trans.qty <= 0:
+        if math.isnan(trans.qty):
             return False
 
         try:
@@ -277,7 +277,7 @@ class BlockChain:
 
         is_txs_positive = self.is_block_txs_positive(new_block)
         if not is_txs_positive:
-            logger.debug("Block has negative of NaN transaction quantities")
+            logger.debug("Block has NaN transaction quantities")
             return False
 
         is_txs_balanced = self.is_block_txs_balanced(new_block)
@@ -329,10 +329,10 @@ class BlockChain:
         return True
 
     def is_block_txs_positive(self, block):
-        """Returns true if all transactions in the given block have a positive and non-NaN quantity.
+        """Returns true if all transactions in the given block have a non-NaN quantity.
         Returns False otherwise."""
         for tx in block.get_transactions():
-            if math.isnan(tx.qty) or tx.qty <= 0:
+            if math.isnan(tx.qty):
                 return False
         return True
 
