@@ -10,6 +10,7 @@ services:
       - CHALLENGE1_PRODUCT_NODE_API_URL=http://mainnet-node:1337
       - CHALLENGE2_PRODUCT_NODE_API_URL=http://mainnet2-node:1337
       - CHALLENGE3_PRODUCT_NODE_API_URL=http://mainnet3-node:1337
+      - CHALLENGE4_PRODUCT_NODE_API_URL=http://mainnet4-node:1337
       # challenge 1
       - CHALLENGE1_MONEYMAKER_URL=http://${FC_HOST}:${CH1_MONEYMAKER_PORT}
       - CHALLENGE1_MAINNET_NODE_URL=${FC_HOST}:${CH1_MAINNET_NODE_PORT}
@@ -26,6 +27,10 @@ services:
       - CHALLENGE3_MAINNET3_NODE_HOST=mainnet3-node
       - CHALLENGE3_MAINNET3_MAGIC=${CH3_MAINNET_MAGIC}
       - CHALLENGE3_ECHOSERVICE_MIN_CONFIRMATIONS=${CH3_ECHOSERVICE_MIN_CONFIRMATIONS}
+      # challenge 4
+      - CHALLENGE4_MAINNET4_NODE_URL=${FC_HOST}:${CH4_MAINNET_NODE_PORT}
+      - CHALLENGE4_MAINNET4_NODE_HOST=mainnet4-node
+      - CHALLENGE4_MAINNET4_MAGIC=${CH4_MAINNET_MAGIC}
       # fumblestore
       - SQLITE_DATABASE_PATH=/opt/fumblechain/volume/fumblestore.sqlite
       - FUMBLESTORE_PORT
@@ -38,7 +43,7 @@ services:
     volumes:
       - /opt/fumblechain/volume
       # for development
-  #      - ./:/opt/fumblechain/src/fumblechain
+#      - ./:/opt/fumblechain/src/fumblechain
 
   # challenge 1
   moneymaker:
@@ -117,6 +122,22 @@ services:
       - FUMBLECHAIN_BLOCKCHAIN_PATH
     env_file:
       - gen/ctf_wallet_addresses_ch3.env
+    volumes:
+      - /opt/fumblechain/bc-volume
+
+  # challenge 4
+  mainnet4-node:
+    build:
+      context: ../..
+      dockerfile: src/fumblechain/docker/challenge4/mainnet4-node/Dockerfile
+    ports:
+      - "${HOST_BIND_ADDRESS}:${CH4_MAINNET_NODE_PORT}:${CH4_MAINNET_NODE_PORT}"
+    environment:
+      - CH4_MAINNET_NODE_PORT
+      - CH4_MAINNET_MAGIC
+      - FUMBLECHAIN_BLOCKCHAIN_PATH
+    env_file:
+      - gen/ctf_wallet_addresses_ch4.env
     volumes:
       - /opt/fumblechain/bc-volume
 

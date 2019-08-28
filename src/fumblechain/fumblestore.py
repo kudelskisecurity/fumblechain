@@ -56,6 +56,7 @@ def insert_products():
     ch1_product_node_api_url = os.environ["CHALLENGE1_PRODUCT_NODE_API_URL"]
     ch2_product_node_api_url = os.environ["CHALLENGE2_PRODUCT_NODE_API_URL"]
     ch3_product_node_api_url = os.environ["CHALLENGE3_PRODUCT_NODE_API_URL"]
+    ch4_product_node_api_url = os.environ["CHALLENGE4_PRODUCT_NODE_API_URL"]
     products = [
         Product(short="flag1", title="2chains", price=5000000,
                 description="Introduction to Blockchain security with essential integrity checks.",
@@ -72,7 +73,12 @@ def insert_products():
                 description="Have to think about that as well.",
                 description_file="challenges/challenge3.html",
                 secret_flag="FCKS{madE_iT_to_teh_End?}", node_api_url=ch3_product_node_api_url,
-                hint="What's a transaction nonce? Probably useless...")
+                hint="What's a transaction nonce? Probably useless..."),
+        Product(short="flag4", title="TxCheck", price=8500000,
+                description="Exploiting transaction validation.",
+                description_file="challenges/challenge4.html",
+                secret_flag="FCKS{nEgaTivE_amounts_rulE}", node_api_url=ch4_product_node_api_url,
+                hint="Could you force someone else to send you coins with a simple transaction?")
     ]
 
     existing_products = [p for p in Product.select()]
@@ -181,6 +187,8 @@ def get_globals():
         "CHALLENGE2_MAINNET2_MAGIC",
         "CHALLENGE3_MAINNET3_NODE_URL",
         "CHALLENGE3_MAINNET3_MAGIC",
+        "CHALLENGE4_MAINNET4_NODE_URL",
+        "CHALLENGE4_MAINNET4_MAGIC",
         "CHALLENGE3_ECHOSERVICE_WALLET_ADDRESS",
         "CHALLENGE3_ECHOSERVICE_MIN_CONFIRMATIONS"
     ]

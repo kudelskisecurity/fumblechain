@@ -103,10 +103,17 @@ def generate_challenge3_wallets(wallet_dir):
     return ch3_pubkeys
 
 
+def generate_challenge4_wallets(wallet_dir):
+    ch4_pubkeys = []
+    write_files(ch4_pubkeys, "ch4")
+    return ch4_pubkeys
+
+
 def main():
     wallet_dir = f"{VOLUME_PATH}wallets"
     os.makedirs(wallet_dir, exist_ok=True)
 
+    # keys for challenges 1-3 client (fumblechain.tar.gz)
     ch1_pubkeys = generate_challenge1_wallets(wallet_dir)
     ch2_pubkeys = generate_challenge2_wallets(wallet_dir)
     ch3_pubkeys = generate_challenge3_wallets(wallet_dir)
@@ -115,6 +122,8 @@ def main():
     pubkeys = ch1_pubkeys + ch2_pubkeys + ch3_pubkeys
     write_bash_file(pubkeys, f"{VOLUME_PATH}{CHALLENGE_WALLETS_FILENAME_PREFIX}.bash")
 
+    # keys for challenge 4 client (fumblechain-ch4.tar.gz)
+    ch4_pubkeys = generate_challenge4_wallets(wallet_dir)
 
 if __name__ == '__main__':
     main()

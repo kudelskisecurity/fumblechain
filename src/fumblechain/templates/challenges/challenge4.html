@@ -1,0 +1,50 @@
+<p>
+    For its 3rd anniversary, FumbleCorp inc. released an early prototype version of FumbleChain.
+    Back then, FumbleCorp was very proud of its transaction system.
+    They were pretty sure every transaction parameter was thouroughly checked, making the system unhackable.
+</p>
+
+<p>
+    This early version requires using a slightly different version of the FumbleChain client.
+</p>
+
+<h4>Client download</h4>
+<p>
+    Download the client here: <a href="/static/downloads/fumblechain-ch4.tar.gz">fumblechain-ch4.tar.gz</a>
+</p>
+
+<p>Then extract the archive and change to the <code>fumblechain</code> directory:</p>
+
+<p>
+    <kbd>tar xf fumblechain-ch4.tar.gz</kbd><br/>
+    <kbd>cd fumblechain</kbd>
+</p>
+
+
+<h4>Connecting to mainnet4</h4>
+
+To start the node and connect to mainnet4:
+
+<p>
+    <kbd>
+        ./fc-docker.sh -p 2225 -n fc-mainnet -i fc -P 1341 -E 20605 -H {{ CHALLENGE4_MAINNET4_NODE_URL }} --magic={{
+        CHALLENGE4_MAINNET4_MAGIC}}</kbd>
+    </kbd>
+</p>
+
+<h4>Interacting with the blockchain</h4>
+
+<p>
+    Use the blockchain explorer's embedded Web Wallet: <a href="http://localhost:20605">Mainnet4 explorer</a>
+</p>
+
+<p>
+    Your mission is to purchase the product which is for sale on this page.
+</p>
+
+<p>
+    Quick links
+    <ul>
+    <li><a href="http://localhost:20605">Mainnet4 explorer</a> (You have to be connected to mainnet4 for the link to work)</li>
+    </ul>
+</p>
