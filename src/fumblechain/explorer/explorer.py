@@ -18,6 +18,7 @@ from explorer.webwallet import WebWallet
 template_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "templates", "explorer")
 app = Flask(__name__, template_folder=template_folder)
 app.debug = True
+app.config.update(SESSION_COOKIE_NAME="session_explorer")
 
 FLASH_SUCCESS = "success"
 FLASH_ERROR = "error"
