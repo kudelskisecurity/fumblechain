@@ -14,18 +14,17 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import session
+from model.wallet import Wallet
 from peewee import DoesNotExist
 from pytz import utc
-from werkzeug.exceptions import NotFound
-from werkzeug.security import generate_password_hash, check_password_hash
-
-from model.wallet import Wallet
 from store.database import Product
 from store.database import User
 from store.database import UserProduct
 from store.database import db
 from store.database import user_owns_product, product_owners, top_users, challenge_solves
 from store.lesson import get_available_lessons
+from werkzeug.exceptions import NotFound
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -302,7 +301,13 @@ def pluralize(count, singular_suffix="", plural_suffix="s"):
 @app.route("/", methods=["GET"])
 def get_home():
     """Display the home page of the FumbleStore."""
-    return render_template("home.html", **get_globals())
+    try:
+        return render_template("home.html", **get_globals())
+    except Exception:
+        # Sign the user out in case the current session is for a user
+        # that does not exist anymore. This can happen after re-building the
+        # FumbleStore from scratch while still being signed in.
+        return redirect("/logout")
 
 
 @app.route("/challenges", methods=["GET"])
