@@ -6,14 +6,14 @@ import logging
 import os
 import textwrap
 
+from explorer.webwallet import WebWallet
 from flask import Flask
+from flask import Markup
 from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import request
 from werkzeug.exceptions import NotFound
-
-from explorer.webwallet import WebWallet
 
 template_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "templates", "explorer")
 app = Flask(__name__, template_folder=template_folder)
@@ -212,7 +212,10 @@ def get_webwallet():
 @app.route("/webwallet/generate", methods=["POST"])
 def post_webwallet_generate():
     """Create a new wallet - endpoint."""
-    WEBWALLET.generate_wallet()
+    wallet_name = WEBWALLET.generate_wallet()
+    flash(Markup(
+        f"Successfully generated new wallet <strong>{wallet_name}</strong>. Please select it as the active wallet before use."),
+        FLASH_SUCCESS)
     return redirect("/webwallet")
 
 
@@ -220,7 +223,14 @@ def post_webwallet_generate():
 def post_webwallet_select_wallet():
     """Select wallet - endpoint"""
     wallet = request.form["wallet"]
-    WEBWALLET.set_active_wallet(wallet)
+    success = WEBWALLET.set_active_wallet(wallet)
+
+    if success:
+        flash(Markup(f"Successfully changed active wallet to <span class=\"badge badge-dark\">{wallet}</span>."),
+              FLASH_SUCCESS)
+    else:
+        flash(f"Failed to change active wallet.", FLASH_ERROR)
+
     return redirect("/webwallet")
 
 
