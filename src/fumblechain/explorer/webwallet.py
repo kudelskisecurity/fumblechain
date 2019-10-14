@@ -5,10 +5,9 @@ import os
 import queue
 from glob import glob
 
-from twisted.internet.task import LoopingCall
-
 from model.transaction import Transaction
 from model.wallet import Wallet
+from twisted.internet.task import LoopingCall
 
 logger = logging.getLogger(__name__)
 
@@ -95,10 +94,14 @@ class WebWallet(object):
         # save wallet to memory
         self.wallets[path] = w
 
+        return path
+
     def set_active_wallet(self, wallet_name):
         """Set the wallet with name `wallet_name` as the active wallet."""
         if wallet_name in self.wallets:
             self.wallet_name = wallet_name
+            return True
+        return False
 
     def active_wallet(self):
         """Returns the name of the active wallet."""
