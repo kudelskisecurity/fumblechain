@@ -17,14 +17,6 @@ Leverage the embedded blockchain explorer and web or CLI wallet to learn about c
 
 For more information, visit the FumbleChain microsite at http://fumblechain.io
 
-## Live demo
-
-No time to lose?
-
-An instance of the FumbleStore is available at https://demo.fumblechain.io/ for demonstration purposes.
-
-Note that for a seamless CTF experience, you may want to run the FumbleStore on your own machine.
-
 # Requirements
 
 To run the FumbleStore, you will need:
