@@ -4,5 +4,5 @@ twisted; python_version >= '3.0'
 flask; python_version >= '3.0'
 APScheduler
 requests
-cryptography
+cryptography==3.3.2
 peewee
